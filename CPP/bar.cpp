@@ -1,61 +1,42 @@
-/*
- Executable file location: /usr/local/bin
-*/
-
 #include <iostream>
 #include <string>
-#include <stdio.h>
-#include <fstream>
-#include <vector>
 using namespace std;
 
-bool file_exists(string filename) {
-    
-    ifstream file(filename);
-    
-    return file.good();
-    
-}
-
-string get_cwd() {
-    
-    string data;
-    FILE * stream;
-    int buffer_size = 100;
-    char buffer[buffer_size];
-    
-    stream = popen("pwd", "r");
-    if (stream) {
-        
-        while (!feof(stream)) {
-            
-            if (fgets(buffer, buffer_size, stream) != NULL) data.append(buffer);
-            
-        }
-        
-    }
-    
-    return data;
-    
-}
+#if defined(_WIN32) || defined(_WIN64)
+#define win
+#elif defined(__linux__) || defined(__unix__)
+#define linux
+#elif defined(__APPLE__)
+#define mac
+#else
+#define none
+#endif
 
 int main(int argc, char* argv[]) {
-    
-    if (argc == 2) {
-        
-        string command = "g++ ";
-        command += argv[1];
-        
-        system(command.c_str());
-        system("./a.out");
-        system("rm ./a.out");
-        
-    } else {
-        
-        cout << "Usage: bar [file]" << endl;
-        cout << "NOTE: Call in directory of file" << endl;
-        
-    }
-    
-    return 0;
+	if (argc == 2) {
+		string filename = argv[1];
+
+		#if defined(win)
+		string outfile = filename.substr(0, filename.size()-4) + ".exe";
+		string cmd_gcc = "g++ " + filename + " -o " + outfile;
+		string cmd_run = outfile;
+		string cmd_rm = "del " + outfile;
+		#elif defined(linux) || defined(mac)
+		string outfile = filename.substr(0, filename.size()-4);
+		string cmd_gcc = "g++ " + filename + " -o " + outfile;
+		string cmd_run = "./ " + filename;
+		string cmd_rm = "rm " + outfile;
+		#endif
+
+		system(cmd_gcc.c_str());
+		system(cmd_run.c_str());
+		system(cmd_rm.c_str());
+
+		return 0;
+	} else {
+		cout << "Usage: bar [file]" << endl;
+		cout << "NOTE: Run in directory of c++ file" << endl;
+
+		return 1;
+	}
 }
