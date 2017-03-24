@@ -1,7 +1,7 @@
 #!/bin/bash
 
-b="#" # could be $1
-lines="$1" # could be $2
+b="#"
+lines=( "$@" )
 widest="0"
 for l in "${lines[@]}"; do if [ "${#l}" -gt "$widest" ]; then widest="${#l}"; fi; done
 full_widest="$((widest+4))"
@@ -16,6 +16,3 @@ for l in "${lines[@]}"; do
 	fi
 done
 echo $(printf -- "$b%.0s" $(seq 1 $full_widest))
-
-lines=( 123 1 123467123456789865433467 12 123456789 1234567 12345 )
-border-text "#" "${lines[@]}"
