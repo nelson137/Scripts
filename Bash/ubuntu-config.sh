@@ -14,7 +14,7 @@ change-root-pass
 
 
 
-errors=()
+errors=("Errors:")
 
 
 
@@ -243,14 +243,8 @@ system
 visuals
 programs
 
-if [ "${#errors[@]}" -gt "0" ]; then
+if [ "${#errors[@]}" -gt "1" ]; then
 	border-text "${errors[@]}" > "$HOME/errors.txt"
 fi
-
-echo ""
-echo "Errors:"
-for e in "${errors[@]}"; do
-	echo "$e"
-done
 
 #sudo reboot
