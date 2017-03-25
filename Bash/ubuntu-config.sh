@@ -37,7 +37,7 @@ installations() {
 	
 	# Google Chrome
 	wget -O "$HOME/Downloads/google-chrome.deb" "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" &&
-	sudo apt-get install -f &&
+	sudo apt-get install -f -y &&
 	sudo dpkg -i "$HOME/Downloads/google-chrome.deb" &&
 	rm "$HOME/Downloads/google-chrome.deb" || errors+=("Downloading Google Chrome")
 
@@ -54,9 +54,11 @@ system() {
 	gsettings set org.gnome.desktop.session idle-delay 1800 || errors+=("Changing the delay for turning the screen off when inactive")
 
 	# ~/.bashrc
-	bash_rc_text='############
-# MY EDITS #
-############
+	bachrc_text='source ~/.bash_additions'
+	bash_additions_text='################
+### MY EDITS ###
+################
+
 mkcd() {
 	if [ "$#" -ne "1" ]; then
 		echo "E: mkcd can only take 1 argument: [dir]"
@@ -64,6 +66,7 @@ mkcd() {
 		mkdir -p -- "$1" && cd -P -- "$1"
 	fi
 }
+
 border-text() {
 	if [ "$#" -gt "0" ]; then
 		b="#"
@@ -85,6 +88,7 @@ border-text() {
 		echo "E: border-text requires an array of lines to border"
 	fi
 }
+
 mygpp() {
 	if [ "$@" -ne "1" ]; then
 		echo "E: mygpp can only take 1 argument: [input_file]"
@@ -92,16 +96,18 @@ mygpp() {
 		g++ "$1" -o "${1%.cpp}"
 	fi
 }
+
 export PATH="$HOME/bin:$PATH"
 alias r="source $HOME/.bashrc"
 source "$HOME/.virtualenvs/MainEnv/bin/activate"'
+	echo "$bash_additions_text" > "$HOME/.bash_additions"
 	if [ -f "$HOME/.bashrc" ]; then
 		echo "
-$bash_rc_text" >> "$HOME/.bashrc"
+$bashrc_text" >> "$HOME/.bashrc"
 	else
-		echo "$bash_rc_text" > "$HOME/.bashrc"
+		echo "$bashrc_text" > "$HOME/.bashrc"
 	fi
-	source "$HOME/.bashrc"
+	source "$HOME/.bash_additions"
 
 	# ~/.vimrc
 	vimrc_text="set whichwrap+=<,>,[,]"
