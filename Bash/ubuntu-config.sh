@@ -1,16 +1,25 @@
 #!/bin/bash
 
-# root passwd
-root-pass() {
-	if [ "$#" -gt 0 ]; then
-		sudo echo "
-Change root password..."
-	else
-		sudo echo "Change root password..."
-	fi
-	sudo passwd root || root-pass "again"
+pre-setup() {
+	# root passwd
+	root-pass() {
+		if [ "$#" -gt 0 ]; then
+			sudo echo "
+	Change root password..."
+		else
+			sudo echo "Change root password..."
+		fi
+		sudo passwd root || root-pass "again"
+	}
+	root-pass
+	
+	# Home Hierarchy
+	echo ""
+	echo ""
+	cd ~
+	mkdir -p .virtualenvs bin Projects && cd Projects
+	mkdir -p Bash Git Python Web/Flask
 }
-root-pass
 
 
 
@@ -20,6 +29,8 @@ errors=("Errors:")
 
 installations() {
 	# apt
+	echo ""
+	echo "Aptitude installations..."
 	sudo apt-add-repository ppa:webupd8team/sublime-text-3 -y || errors+=("adding the Sublime Text 3 source to sources.list")
 	sudo apt-get update || errors+=("updating system")
 	sudo apt-get upgrade -y || errors+=("upgrading system")
@@ -27,20 +38,28 @@ installations() {
 	sudo chown -R `whoami`:`whoami` /var/www || errors+=("giving user full permissions to /var/www")
 
 	# git
+	echo ""
+	echo "Cloning Git repositories..."
 	git clone https://github.com/nelson137/scripts.git "$HOME/Projects/Git/scripts" || errors+=("cloning scripts repository from Github")
 
 	# Google Grive
+	echo ""
+	echo "Downloading from Google Drive..."
 	wget -O "$HOME/Pictures/orion-nebula.jpg" "https://drive.google.com/uc?id=0B3AM8GpU5FlwVlF3REMyQ1FnTTg&export=download" || errors+=("downloading orion-nebula.jpg wallpaper from Google Drive")
 	wget -O "$HOME/Downloads/vault-key.zip" "https://drive.google.com/uc?id=0B3AM8GpU5FlwUHZiM0JIamxJc0E&export=download" || errors+=("vault-key setup: download")
 	unzip "$HOME/Downloads/vault-key.zip" -d "$HOME/Projects/Web/Flask/" || errors+=("vault-key setup: unzip")
 	rm "$HOME/Downloads/vault-key.zip" || errors+=("vault-key setup: delete zip")
 	
 	# Google Chrome
+	echo ""
+	echo "Installing Google Chrome..."
 	wget -O "$HOME/Downloads/google-chrome.deb" "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" || errors+=("Google Chrome: downloading")
 	sudo dpkg -i "$HOME/Downloads/google-chrome.deb" || sudo apt-get install -f -y && sudo dpkg -i "$HOME/Downloads/google-chrome.deb" || errors+=("Google Chrome: unpacking")
 	rm "$HOME/Downloads/google-chrome.deb" || errors+=("Google Chrome: deleting deb")
 
 	# Tor
+	echo ""
+	echo "Installing Tor..."
 	wget -O "$HOME/Downloads/tor.tar.xz" "https://github.com/TheTorProject/gettorbrowser/releases/download/v6.5.1/tor-browser-linux64-6.5.1_en-US.tar.xz" || errors+=("Tor: downloading")
 	mkdir "$HOME/tor" && tar -xf "$HOME/Downloads/tor.tar.xz" -C "$HOME/tor/" --strip-components=1 || errors+=("Tor: unpacking")
 	rm "$HOME/Downloads/tor.tar.xz" || errors+=("Tor: deleting tar.xz")
@@ -50,9 +69,13 @@ installations() {
 
 system() {
 	# System Settings
+	echo ""
+	echo "Updating system settings..."
 	gsettings set org.gnome.desktop.session idle-delay 1800 || errors+=("system settings: changing turn the screen off when inactive delay")
 
 	# ~/.bashrc
+	echo ""
+	echo "Updating .bashrc..."
 	bachrc_text='source ~/.bash_additions'
 	bash_additions_text='################
 ### MY EDITS ###
@@ -109,6 +132,8 @@ $bashrc_text" >> "$HOME/.bashrc"
 	source "$HOME/.bash_additions"
 
 	# ~/.vimrc
+	echo ""
+	echo "Updating .vimrc..."
 	vimrc_text="set whichwrap+=<,>,[,]"
 	if [ -f "$HOME/.vimrc" ]; then
 		echo "
@@ -118,6 +143,8 @@ $vimrc_text" >> "$HOME/.vimrc"
 	fi
 
 	# Startup Apps
+	echo ""
+	echo "Creating startup app entries..."
 	mkdir "$HOME/.config/autostart/"
 	term_on_startup_text='[Desktop Entry]
 Name=Terminal
@@ -127,13 +154,10 @@ X-GNOME-Autostart-enabled=true
 Hidden=false'
 	echo "$term_on_startup_text" > "$HOME/.config/autostart/gnome-terminal.desktop"
 
-	# Home Hierarchy
-	cd ~
-	mkdir -p .virtualenvs bin Projects && cd Projects
-	mkdir -p Bash Git Python Web/Flask
-
 	# ~/bin
-	cd "$HOME/Projects/Git/scripts/Bash"
+	echo ""
+	echo "Creating ~/bin symbolic links..."
+	cd "$HOME/Projects/Git/scripts/Bash/"
 	scripts=( * )
 	for s in ${scripts[@]}; do
 		sans_ext="${s%.sh}"
@@ -143,6 +167,8 @@ Hidden=false'
 	done
 
 	# Virtualenvs
+	echo ""
+	echo "Setting up virtualenvs..."
 	virtualenv -p python3.5 "$HOME/.virtualenvs/MainEnv" || errors+=("MainEnv: create")
 	source "$HOME/.virtualenvs/MainEnv/bin/activate" || errors+=("MainEnv: source")
 	pip install myplatform flask requests || errors+=("MainEnv: installing myplatform, flask, and requests")
@@ -152,12 +178,18 @@ Hidden=false'
 
 visuals() {
 	# Launcher Favorites
+	echo ""
+	echo "Updating launcher favorites..."
 	gsettings set com.canonical.Unity.Launcher favorites '["unity://expo-icon","application://firefox.desktop","application://google-chrome.desktop","application://gnome-terminal.desktop","application://org.gnome.Nautilus.desktop","application://sublime-text.desktop","unity://running-apps"]' || errors+=("Setting the Launcher Favorites order")
 
 	# Wallpaper
+	echo ""
+	echo "Updating wallpaper..."
 	gsettings set org.gnome.desktop.background picture-uri "file://$HOME/Pictures/orion-nebula.jpg" || errors+=("setting wallpaper")
 
 	# Terminal Profile
+	echo ""
+	echo "Updating Terminal profile..."
 	term_profile="/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9"
 	dconf write "$term_profile/visible-name" "'Main'" || errors+=("terminal profile settings: name")
 	#dconf write "$term_profile/default-size-columns" 80 || errors+=("terminal profile settings: columns") #default=80
@@ -171,6 +203,8 @@ visuals() {
 
 programs() {
 	# Firefox
+	echo ""
+	echo "Configuring Firefox..."
 	firefox && sleep 3 && kill -9 "$(pgrep firefox)" || errors+=("Firefox: starting then stopping")
 	ff_user_text='// UI bar widgets
 	user_pref("browser.uiCustomization.state", "{\"placements\":{\"PanelUI-contents\":[\"zoom-controls\",\"new-window-button\",\"privatebrowsing-button\",\"save-page-button\",\"history-panelmenu\",\"fullscreen-button\",\"preferences-button\",\"add-ons-button\",\"developer-button\"],\"addon-bar\":[\"addonbar-closebutton\",\"status-bar\"],\"PersonalToolbar\":[\"personal-bookmarks\"],\"nav-bar\":[\"urlbar-container\",\"bookmarks-menu-button\",\"downloads-button\"],\"TabsToolbar\":[\"tabbrowser-tabs\",\"new-tab-button\",\"alltabs-button\"],\"toolbar-menubar\":[\"menubar-items\"]},\"seen\":[\"loop-button\",\"pocket-button\",\"developer-button\"],\"dirtyAreaCache\":[\"PersonalToolbar\",\"nav-bar\",\"PanelUI-contents\",\"addon-bar\",\"TabsToolbar\",\"toolbar-menubar\"],\"currentVersion\":6,\"newElementCount\":0}");
@@ -215,9 +249,13 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 	fi
 
 	# Google Chrome
+	echo ""
+	echo "Configuring Google Chrome..."
 	google-chrome && sleep 3 && kill -9 "$(pgrep google-chrome)" || errors+=("Google Chrome: starting then stopping")
 	
 	# Sublime Text
+	echo ""
+	echo "Configuring Sublime Text..."
 	subl && sleep 2 && kill -9 "$(pgrep subl)" || errors+=("Sublime Text: starting then stopping")
 	wget -O "$HOME/.config/sublime-text-3/Installed Packages/Package Control.sublime-package" "https://packagecontrol.io/Package%20Control.sublime-package" || errors+=("Sublime Text: downloading Package Control")
 	installed_packages_text='{
@@ -236,6 +274,7 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 
 
 
+pre-setup
 installations
 system
 visuals
