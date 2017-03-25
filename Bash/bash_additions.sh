@@ -37,3 +37,7 @@ mygpp() {
 		g++ "$1" -o "${1%.cpp}"
 	fi
 }
+
+export PATH="$HOME/bin:$PATH"
+alias r="source $HOME/.bashrc"
+source ~/.virtualenvs/MainEnv/bin/activate
