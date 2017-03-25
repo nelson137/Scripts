@@ -215,10 +215,10 @@ $firefox_user_text" >> "$HOME/.mozilla/firefox/$profile/user.js" || errors+=("Ch
 	fi
 
 	# Google Chrome
-	google-chrome & export pid_chrome="$!" && sleep 3 && kill -9 "$pid_chrome" || errors+=("Starting then stopping Google Chrome")
+	google-chrome && sleep 3 && kill -9 "$(pgrep google-chrome)" || errors+=("Starting then stopping Google Chrome")
 	
 	# Sublime Text
-	subl & export pid_subl="$!" && sleep 2 && kill -9 "$pid_subl" || errors+=("Starting then stopping Sublime Text")
+	subl && sleep 2 && kill -9 "$(pgrep subl)" || errors+=("Starting then stopping Sublime Text")
 
 	wget -O "$HOME/.config/sublime-text-3/Installed Packages/Package Control.sublime-package" "https://packagecontrol.io/Package%20Control.sublime-package" || errors+=("Downloading the Sublime Text Package Control")
 
