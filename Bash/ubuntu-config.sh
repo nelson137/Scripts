@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # root passwd
-change-root-pass() {
+root-pass() {
 	if [ "$#" -gt 0 ]; then
 		sudo echo "
 Change root password..."
 	else
 		sudo echo "Change root password..."
 	fi
-	sudo passwd root || change-root-pass "again"
+	sudo passwd root || root-pass "again"
 }
-change-root-pass
+root-pass
 
 
 
