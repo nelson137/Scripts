@@ -36,15 +36,14 @@ installations() {
 	rm "$HOME/Downloads/vault-key.zip" || errors+=("vault-key setup: delete zip")
 	
 	# Google Chrome
-	wget -O "$HOME/Downloads/google-chrome.deb" "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" &&
-	sudo apt-get install -f -y &&
-	sudo dpkg -i "$HOME/Downloads/google-chrome.deb" &&
-	rm "$HOME/Downloads/google-chrome.deb" || errors+=("Google Chrome: downloading")
+	wget -O "$HOME/Downloads/google-chrome.deb" "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" || errors+=("Google Chrome: downloading")
+	sudo dpkg -i "$HOME/Downloads/google-chrome.deb" || sudo apt-get install -f -y && sudo dpkg -i "$HOME/Downloads/google-chrome.deb" || errors+=("Google Chrome: unpacking")
+	rm "$HOME/Downloads/google-chrome.deb" || errors+=("Google Chrome: deleting deb")
 
 	# Tor
-	wget -O "$HOME/Downloads/tor.tar.xz" "https://github.com/TheTorProject/gettorbrowser/releases/download/v6.5.1/tor-browser-linux64-6.5.1_en-US.tar.xz" &&
-	mkdir "$HOME/tor" && tar -xf "$HOME/Downloads/tor.tar.xz" -C "$HOME/tor/" --strip-components=1 &&
-	rm "$HOME/Downloads/tor.tar.xz" || errors+=("Tor: downloading")
+	wget -O "$HOME/Downloads/tor.tar.xz" "https://github.com/TheTorProject/gettorbrowser/releases/download/v6.5.1/tor-browser-linux64-6.5.1_en-US.tar.xz" || errors+=("Tor: downloading")
+	mkdir "$HOME/tor" && tar -xf "$HOME/Downloads/tor.tar.xz" -C "$HOME/tor/" --strip-components=1 || errors+=("Tor: unpacking")
+	rm "$HOME/Downloads/tor.tar.xz" || errors+=("Tor: deleting tar.xz")
 }
 
 
