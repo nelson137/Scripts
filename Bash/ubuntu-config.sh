@@ -30,10 +30,8 @@ installations() {
 	git clone https://github.com/nelson137/scripts.git "$HOME/Projects/Git/scripts" || errors+=("Cloning the scripts repository from Github")
 
 	# Google Grive
-	wget -P "$HOME/Downloads/" "https://drive.google.com/uc?id=0B3AM8GpU5FlwVlF3REMyQ1FnTTg&export=download" &&
-	mv "$HOME/Downloads/orion-nebula.jpg" "$HOME/Pictures/" || errors+=("Downloading the orion-nebula.jpg wallpaper from Google Drive")
-
-	wget -P "$HOME/Downloads/" "https://drive.google.com/uc?id=0B3AM8GpU5FlwUHZiM0JIamxJc0E&export=download" &&
+	wget -O "$HOME/Pictures/orion-nebula.jpg" "https://drive.google.com/uc?id=0B3AM8GpU5FlwVlF3REMyQ1FnTTg&export=download" || errors+=("Downloading the orion-nebula.jpg wallpaper from Google Drive")
+	wget -O "$HOME/Downloads/vault-key.zip" "https://drive.google.com/uc?id=0B3AM8GpU5FlwUHZiM0JIamxJc0E&export=download" &&
 	unzip "$HOME/Downloads/vault-key.zip" -d "$HOME/Projects/Web/Flask/" &&
 	rm "$HOME/Downloads/vault-key.zip" || errors+=("Downloading vault-key.zip from Google Drive")
 	
