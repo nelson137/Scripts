@@ -158,20 +158,21 @@ visuals() {
 	gsettings set org.gnome.desktop.background picture-uri "file://$HOME/Pictures/orion-nebula.jpg" || errors+=("setting wallpaper")
 
 	# Terminal Profile
-	profile="/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9"
-	dconf write "$profile/visible-name" "'Main'" || errors+=("terminal profile settings: name")
-	#dconf write "$profile/default-size-columns" 80 || errors+=("terminal profile settings: columns") #default=80
-	#dconf write "$profile/default-size-rows 24" || errors+=("terminal profile settings: rows") #default=24
-	dconf write "$profile/use-transparent-background" true || errors+=("terminal profile settings: transparent bg")
-	dconf write "$profile/background-transparency-percent" 20 || errors+=("terminal profile settings: transparent bg %")
-	dconf write "$profile/cursor-shape" "'ibeam'" || errors+=("terminal profile settings: cursor shape")
+	term_profile="/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9"
+	dconf write "$term_profile/visible-name" "'Main'" || errors+=("terminal profile settings: name")
+	#dconf write "$term_profile/default-size-columns" 80 || errors+=("terminal profile settings: columns") #default=80
+	#dconf write "$term_profile/default-size-rows 24" || errors+=("terminal profile settings: rows") #default=24
+	dconf write "$term_profile/use-transparent-background" true || errors+=("terminal profile settings: transparent bg")
+	dconf write "$term_profile/background-transparency-percent" 20 || errors+=("terminal profile settings: transparent bg %")
+	dconf write "$term_profile/cursor-shape" "'ibeam'" || errors+=("terminal profile settings: cursor shape")
 }
 
 
 
 programs() {
 	# Firefox
-	firefox_user_text='// UI bar widgets
+	firefox && sleep 3 && kill -9 "$(pgrep firefox)" || errors+=("Firefox: starting then stopping")
+	ff_user_text='// UI bar widgets
 	user_pref("browser.uiCustomization.state", "{\"placements\":{\"PanelUI-contents\":[\"zoom-controls\",\"new-window-button\",\"privatebrowsing-button\",\"save-page-button\",\"history-panelmenu\",\"fullscreen-button\",\"preferences-button\",\"add-ons-button\",\"developer-button\"],\"addon-bar\":[\"addonbar-closebutton\",\"status-bar\"],\"PersonalToolbar\":[\"personal-bookmarks\"],\"nav-bar\":[\"urlbar-container\",\"bookmarks-menu-button\",\"downloads-button\"],\"TabsToolbar\":[\"tabbrowser-tabs\",\"new-tab-button\",\"alltabs-button\"],\"toolbar-menubar\":[\"menubar-items\"]},\"seen\":[\"loop-button\",\"pocket-button\",\"developer-button\"],\"dirtyAreaCache\":[\"PersonalToolbar\",\"nav-bar\",\"PanelUI-contents\",\"addon-bar\",\"TabsToolbar\",\"toolbar-menubar\"],\"currentVersion\":6,\"newElementCount\":0}");
 	// Show my windows and tabs from last time
 	user_pref("browser.startup.page", 3);
@@ -179,7 +180,7 @@ programs() {
 	user_pref("browser.urlbar.clickSelectsAll", true);
 	// Enable search suggestions
 	user_pref("browser.search.suggest.enabled", true);
-	user_pref("browser.urlbar.suggest.searches", true);
+ 	user_pref("browser.urlbar.suggest.searches", true);
 	// Homepage
 	user_pref("browser.startup.homepage", "about:newtab");
 	// Newtab blank
@@ -202,15 +203,15 @@ programs() {
 
 	while IFS= read -r line; do
 		if [[ "$line" == "Path="* ]]; then
-			profile="${line:5}"
+			ff_profile="${line:5}"
 		fi
 	done < "$HOME/.mozilla/firefox/profiles.ini"
 
-	if [ -f "$HOME/.mozilla/firefox/$profile/user.js" ]; then
+	if [ -f "$HOME/.mozilla/firefox/$ff_profile/user.js" ]; then
 	    echo "
-$firefox_user_text" >> "$HOME/.mozilla/firefox/$profile/user.js" || errors+=("Firefox: settings")
+$ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Firefox: settings")
 	else
-	    echo "$firefox_user_text" > "$HOME/.mozilla/firefox/$profile/user.js" || errors+=("Firefox: settings")
+	    echo "$ff_user_text" > "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Firefox: settings")
 	fi
 
 	# Google Chrome
@@ -218,9 +219,7 @@ $firefox_user_text" >> "$HOME/.mozilla/firefox/$profile/user.js" || errors+=("Fi
 	
 	# Sublime Text
 	subl && sleep 2 && kill -9 "$(pgrep subl)" || errors+=("Sublime Text: starting then stopping")
-
 	wget -O "$HOME/.config/sublime-text-3/Installed Packages/Package Control.sublime-package" "https://packagecontrol.io/Package%20Control.sublime-package" || errors+=("Sublime Text: downloading Package Control")
-
 	installed_packages_text='{
 		"installed_packages":
 		[
