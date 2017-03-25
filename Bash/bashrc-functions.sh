@@ -9,7 +9,7 @@ mkcd() {
 }
 
 border-text() {
-	if [ "$#" -gt 0 ]; then
+	if [ "$#" -gt "0" ]; then
 		b="#"
 		lines=("$@")
 		widest="0"
