@@ -46,9 +46,6 @@ installations() {
 	echo ""
 	echo "Downloading from Google Drive..."
 	wget -O "$HOME/Pictures/orion-nebula.jpg" "https://drive.google.com/uc?id=0B3AM8GpU5FlwVlF3REMyQ1FnTTg&export=download" || errors+=("downloading orion-nebula.jpg wallpaper from Google Drive")
-	wget -O "$HOME/Downloads/vault-key.zip" "https://drive.google.com/uc?id=0B3AM8GpU5FlwUHZiM0JIamxJc0E&export=download" || errors+=("vault-key setup: download")
-	unzip "$HOME/Downloads/vault-key.zip" -d "$HOME/Projects/Web/Flask/" || errors+=("vault-key setup: unzip")
-	rm "$HOME/Downloads/vault-key.zip" || errors+=("vault-key setup: delete zip")
 	
 	# Google Chrome
 	echo ""
@@ -205,7 +202,6 @@ programs() {
 	# Firefox
 	echo ""
 	echo "Configuring Firefox..."
-	firefox && sleep 3 && kill -9 "$(pgrep firefox)" || errors+=("Firefox: starting then stopping")
 	ff_user_text='// UI bar widgets
 	user_pref("browser.uiCustomization.state", "{\"placements\":{\"PanelUI-contents\":[\"zoom-controls\",\"new-window-button\",\"privatebrowsing-button\",\"save-page-button\",\"history-panelmenu\",\"fullscreen-button\",\"preferences-button\",\"add-ons-button\",\"developer-button\"],\"addon-bar\":[\"addonbar-closebutton\",\"status-bar\"],\"PersonalToolbar\":[\"personal-bookmarks\"],\"nav-bar\":[\"urlbar-container\",\"bookmarks-menu-button\",\"downloads-button\"],\"TabsToolbar\":[\"tabbrowser-tabs\",\"new-tab-button\",\"alltabs-button\"],\"toolbar-menubar\":[\"menubar-items\"]},\"seen\":[\"loop-button\",\"pocket-button\",\"developer-button\"],\"dirtyAreaCache\":[\"PersonalToolbar\",\"nav-bar\",\"PanelUI-contents\",\"addon-bar\",\"TabsToolbar\",\"toolbar-menubar\"],\"currentVersion\":6,\"newElementCount\":0}");
 	// Show my windows and tabs from last time
@@ -234,7 +230,7 @@ programs() {
 	user_pref("browser.search.defaultenginename", "DuckDuckGo");
 	user_pref("browser.search.defaultenginename.US", "data:text/plain,browser.search.defaultenginename.US=DuckDuckGo");
 	*/'
-
+	firefox && sleep 3 && kill -9 "$(pgrep firefox)" || errors+=("Firefox: starting then stopping")
 	while IFS= read -r line; do
 		if [[ "$line" == "Path="* ]]; then
 			ff_profile="${line:5}"
