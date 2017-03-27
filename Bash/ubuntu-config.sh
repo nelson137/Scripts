@@ -199,6 +199,9 @@ visuals() {
 
 
 programs() {
+	# Git
+	git config --global push.default simple
+	
 	# Firefox
 	echo ""
 	echo "Configuring Firefox..."
