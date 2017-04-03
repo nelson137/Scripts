@@ -35,12 +35,14 @@ installations() {
 	sudo apt-get update || errors+=("updating system")
 	sudo apt-get upgrade -y || errors+=("upgrading system")
 	sudo apt-get install sl vim git virtualenv libxss1 libappindicator1 libindicator7 sublime-text-installer apache2 -y || errors+=("apt-get installations")
-	sudo chown -R `whoami`:`whoami` /var/www || errors+=("giving user full permissions to /var/www")
+	sudo chown -R `whoami`:`whoami` /var/www/ || errors+=("giving user full permissions to /var/www")
 
 	# git
 	echo ""
-	echo "Cloning Git repositories..."
-	git clone https://github.com/nelson137/scripts.git "$HOME/Projects/Git/scripts" || errors+=("cloning scripts repository from Github")
+	echo "Cloning Git tools and repositories..."
+	git clone "https://github.com/nelson137/scripts.git" "$HOME/Projects/Git/scripts/" || errors+=("cloning scripts repository from Github")
+	wget -O "$HOME/bin/git-cache-meta" "https://gist.githubusercontent.com/andris9/1978266/raw/9645c54ccc3c4af70bffb6fecdd396c25ea689d9/git-cache-meta.sh" || errors+=("downloading git-cache-meta")
+	chmod +x "$HOME/bin/git-cache-meta" || errors+=("making git-cache-meta executable")
 
 	# Google Grive
 	echo ""
