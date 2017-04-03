@@ -41,8 +41,8 @@ installations() {
 	echo ""
 	echo "Cloning Git tools and repositories..."
 	git clone "https://github.com/nelson137/scripts.git" "$HOME/Projects/Git/scripts/" || errors+=("cloning scripts repository from Github")
-	wget -O "$HOME/bin/git-cache-meta" "https://gist.githubusercontent.com/andris9/1978266/raw/9645c54ccc3c4af70bffb6fecdd396c25ea689d9/git-cache-meta.sh" || errors+=("downloading git-cache-meta")
-	chmod +x "$HOME/bin/git-cache-meta" || errors+=("making git-cache-meta executable")
+	sudo wget -O /usr/local/bin/git-cache-meta "https://gist.githubusercontent.com/andris9/1978266/raw/9645c54ccc3c4af70bffb6fecdd396c25ea689d9/git-cache-meta.sh" || errors+=("downloading git-cache-meta")
+	sudo chmod +x /usr/local/bin/git-cache-meta || errors+=("making git-cache-meta executable")
 
 	# Google Grive
 	echo ""
