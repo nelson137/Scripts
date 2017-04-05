@@ -111,7 +111,7 @@ border-text() {
 }
 
 mygpp() {
-	if [ "$@" -ne "1" ]; then
+	if [ "$#" -ne "1" ]; then
 		echo "E: mygpp can only take 1 argument: [input_file]"
 	else
 		g++ "$1" -o "${1%.cpp}"
