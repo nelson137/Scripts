@@ -34,9 +34,7 @@ int main(int argc, char* argv[]) {
 
 		return 0;
 	} else {
-		cout << "Usage: bar [file]" << endl;
-		cout << "NOTE: Run in directory of c++ file" << endl;
-
+		cerr << "Usage: bar FILE" << endl << "NOTE: Run in directory of c++ file" << endl;
 		return 1;
 	}
 }
