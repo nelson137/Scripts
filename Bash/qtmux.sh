@@ -1,5 +1,7 @@
 #!/bin/bash
 
+hash tmux &> /dev/null || { echo "E: tmux is not installed"; exit 1; }
+
 TMUX=''
 args=( "$@" )
 
