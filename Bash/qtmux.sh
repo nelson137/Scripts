@@ -7,22 +7,22 @@ name="Temp"
 nsplits="0"
 
 for i in "${!args[@]}"; do
-	if [ "${args[$i]}" == "-n" ]; then
+	if [[ ${args[$i]} == -n ]]; then
 		name="${args[$((i+1))]}"
-	elif [ "${args[$i]}" == "-s" ]; then
+	elif [[ ${args[$i]} == -s ]]; then
 		npanes="${args[$((i+1))]}"
 	fi
 done
 
 tmux new -s "$name" -n "$name" -d
 
-if [ "$npanes" -lt "5" ]; then
-	if [ "$npanes" == "2" ]; then
+if [[ $npanes -lt 5 ]]; then
+	if [[ $npanes == 2 ]]; then
 		tmux splitw -t 0
-	elif [ "$npanes" == "3" ]; then
+	elif [[ $npanes == 3 ]]; then
 		tmux splitw -t 0 -p 33
 		tmux splitw -t 0
-	elif [ "$npanes" == "4" ]; then
+	elif [[ $npanes == 4 ]]; then
 		tmux splitw -t 0
 		tmux splitw -t 0
 		tmux splitw -t 1
