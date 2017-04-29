@@ -198,33 +198,33 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 	subl && sleep 2 && kill -9 "$(pgrep subl)" || errors+=("Sublime Text: starting then stopping")
 	wget -O "$HOME/.config/sublime-text-3/Installed Packages/Package Control.sublime-package" "https://packagecontrol.io/Package%20Control.sublime-package" || errors+=("Sublime Text: downloading Package Control")
 	installed_packages='{
-    "installed_packages":
-    [
-        "A File Icon",
-        "Bash Build System",
-        "Emmet",
-        "Git",
-        "Package Control",
-        "PackageResourceViewer",
-        "Virtualenv"
-    ]
+	"installed_packages":
+	[
+		"A File Icon",
+		"Bash Build System",
+		"Emmet",
+		"Git",
+		"Package Control",
+		"PackageResourceViewer",
+		"Virtualenv"
+	]
 }
 '
 	subl_prefs='{
-    "ignored_packages":
-    [
-        "Vintage"
-    ],
-    "rulers":
-    [
-       80
-    ],
-    "open_files_in_new_window": false,
-    "close_windows_when_empty": false,
-    "ensure_newline_at_eof_on_save": true,
-    "translate_tabs_to_spaces": true,
-    "match_brackets_angle": true,
-    "drag_text": true,
+	"ignored_packages":
+	[
+		"Vintage"
+	],
+	"rulers":
+	[
+		80
+	],
+	"open_files_in_new_window": false,
+	"close_windows_when_empty": false,
+	"ensure_newline_at_eof_on_save": true,
+	"translate_tabs_to_spaces": true,
+	"match_brackets_angle": true,
+	"drag_text": true,
 }
 '
 	echo "$installed_packages" > "$HOME/.config/sublime-text-3/Packages/User/Package Control.sublime-settings" || errors+=("Sublime Text: Package Control installed_packages")
