@@ -202,6 +202,7 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 		[
 			"A File Icon",
 			"Bash Build System",
+			"Emmet",
 			"Git",
 			"Package Control",
 			"PackageResourceViewer",
