@@ -4,8 +4,7 @@ pre-setup() {
 	# root passwd
 	root-pass() {
 		if [[ $# > 0 ]]; then
-			sudo echo "
-	Change root password..."
+			sudo echo ""; echo "Change root password..."
 		else
 			sudo echo "Change root password..."
 		fi
