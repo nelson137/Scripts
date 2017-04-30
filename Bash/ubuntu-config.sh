@@ -222,7 +222,8 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 	"open_files_in_new_window": false,
 	"close_windows_when_empty": false,
 	"ensure_newline_at_eof_on_save": true,
-	"translate_tabs_to_spaces": true,
+	"detect_indentation": false,
+	"translate_tabs_to_spaces": false,
 	"match_brackets_angle": true,
 	"drag_text": true,
 }
