@@ -28,22 +28,19 @@ errors=("Errors:")
 installations() {
 	# apt
 	echo ""; echo "Aptitude installations..."
-	sudo apt-add-repository ppa:webupd8team/sublime-text-3 -y || errors+=("adding the Sublime Text 3 source to sources.list")
-	sudo apt-get update || errors+=("updating system")
-	sudo apt-get upgrade -y || errors+=("upgrading system")
-	sudo apt-get install sl vim tmux git virtualenv python3-tk libxss1 libappindicator1 libindicator7 sublime-text-installer apache2 -y || errors+=("apt-get installations")
-	sudo chown -R `whoami`:`whoami` /var/www/ || errors+=("giving user full permissions to /var/www")
+	sudo apt-add-repository ppa:webupd8team/sublime-text-3 -y || errors+=("installations: adding the sublime text repository to sources.list")
+	sudo apt-get update || errors+=("installations: updating system")
+	sudo apt-get upgrade -y || errors+=("installations: upgrading system")
+	sudo apt-get install sl vim tmux git virtualenv python3-tk libxss1 libappindicator1 libindicator7 sublime-text-installer apache2 -y || errors+=("installations: apt-get")
+	sudo chown -R `whoami`:`whoami` /var/www/ || errors+=("installations: giving user full permissions to /var/www/")
 
 	# git
 	echo ""; echo "Cloning Git tools and repositories..."
-	git clone "https://github.com/nelson137/scripts.git" "$HOME/Projects/Git/scripts/" || errors+=("cloning scripts repository from Github")
-	sudo wget -O /usr/local/bin/git-cache-meta "https://gist.githubusercontent.com/andris9/1978266/raw/9645c54ccc3c4af70bffb6fecdd396c25ea689d9/git-cache-meta.sh" || errors+=("downloading git-cache-meta")
-	sudo chmod +x /usr/local/bin/git-cache-meta || errors+=("making git-cache-meta executable")
+	git clone "https://github.com/nelson137/scripts.git" "$HOME/Projects/Git/scripts/" || errors+=("git: cloning scripts repository")
+	git clone "https://github.com/nelson137/wallpapers.git" "$HOME/Projects/Git/wallpapers/" || errors+=("git: cloning wallpapers repository")
+	sudo wget -O /usr/local/bin/git-cache-meta "https://gist.githubusercontent.com/andris9/1978266/raw/9645c54ccc3c4af70bffb6fecdd396c25ea689d9/git-cache-meta.sh" || errors+=("git-cache-meta: downloading")
+	sudo chmod +x /usr/local/bin/git-cache-meta || errors+=("git-cache-meta: making executable")
 
-	# Google Grive
-	echo ""; echo "Downloading from Google Drive..."
-	wget -O "$HOME/Pictures/orion-nebula.jpg" "https://drive.google.com/uc?id=0B3AM8GpU5FlwVlF3REMyQ1FnTTg&export=download" || errors+=("downloading orion-nebula.jpg wallpaper from Google Drive")
-	
 	# Google Chrome
 	echo ""; echo "Installing Google Chrome..."
 	wget -O "$HOME/Downloads/google-chrome.deb" "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" || errors+=("Google Chrome: downloading")
@@ -62,7 +59,7 @@ installations() {
 system() {
 	# System Settings
 	echo ""; echo "Updating system settings..."
-	gsettings set org.gnome.desktop.session idle-delay 1800 || errors+=("system settings: changing turn the screen off when inactive delay")
+	gsettings set org.gnome.desktop.session idle-delay 1800 || errors+=("system settings: changing the delay for turning the screen off when inactive")
 
 	# .bashrc
 	echo ""; echo "Updating .bashrc..."
@@ -100,19 +97,19 @@ Hidden=false'
 	# ~/bin
 	echo ""; echo "Creating ~/bin symbolic links..."
 	cd "$HOME/Projects/Git/scripts/Bash/"
-	files=( * )
+	files=(*)
 	for f in ${files[@]}; do
 		sans_ext="${s%.sh}"
 		if [ ! -f "$HOME/bin/$sans_ext" ]; then
-			ln -s "$HOME/Projects/Git/scripts/Bash/$f" "$HOME/bin/$sans_ext" || errors+=("creating ~/bin links")
+			ln -s "$HOME/Projects/Git/scripts/Bash/$f" "$HOME/bin/$sans_ext" || errors+=("~/bin: creating symbolic links")
 		fi
 	done
 
 	# Virtualenvs
 	echo ""; echo "Setting up virtualenvs..."
-	virtualenv -p python3.5 "$HOME/.virtualenvs/MainEnv" --system-site-packages || errors+=("virtualenvs: MainEnv: creation")
-	source "$HOME/.virtualenvs/MainEnv/bin/activate" || errors+=("virtualenvs: MainEnv: sourcing")
-	pip install myplatform flask requests || errors+=("virtualenvs: MainEnv: installing myplatform, flask, and requests")
+	virtualenv -p python3.5 "$HOME/.virtualenvs/MainEnv" --system-site-packages || errors+=("MainEnv: creation")
+	source "$HOME/.virtualenvs/MainEnv/bin/activate" || errors+=("MainEnv: sourcing")
+	pip install myplatform flask requests || errors+=("MainEnv: installing myplatform, flask, and requests")
 }
 
 
@@ -129,12 +126,12 @@ visuals() {
 	# Terminal Profile
 	echo ""; echo "Updating Terminal profile..."
 	term_profile="/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9"
-	dconf write "$term_profile/visible-name" "'Main'" || errors+=("terminal profile settings: name")
-	#dconf write "$term_profile/default-size-columns" 80 || errors+=("terminal profile settings: columns") #default=80
-	#dconf write "$term_profile/default-size-rows 24" || errors+=("terminal profile settings: rows") #default=24
-	dconf write "$term_profile/use-transparent-background" true || errors+=("terminal profile settings: transparent bg")
-	dconf write "$term_profile/background-transparency-percent" 20 || errors+=("terminal profile settings: transparent bg %")
-	dconf write "$term_profile/cursor-shape" "'ibeam'" || errors+=("terminal profile settings: cursor shape")
+	dconf write "$term_profile/visible-name" "'Main'" || errors+=("terminal profile: setting the name")
+	#dconf write "$term_profile/default-size-columns" 80 || errors+=("terminal profile: setting the default columns") #default=80
+	#dconf write "$term_profile/default-size-rows 24" || errors+=("terminal profile: setting the default rows") #default=24
+	dconf write "$term_profile/use-transparent-background" true || errors+=("terminal profile: setting transparent bg")
+	dconf write "$term_profile/background-transparency-percent" 20 || errors+=("terminal profile: setting transparent bg %")
+	dconf write "$term_profile/cursor-shape" "'ibeam'" || errors+=("terminal profile: setting the cursor shape")
 }
 
 
