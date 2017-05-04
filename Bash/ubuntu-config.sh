@@ -237,7 +237,7 @@ visuals
 programs
 
 if [[ ${#errors[@]} > 1 ]]; then
-	border "${errors[@]}" > "$HOME/setup-errors.txt"
+	border "${errors[@]}" > "$HOME/setup-errors.log"
 fi
 
 #sudo reboot
