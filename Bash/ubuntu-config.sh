@@ -31,7 +31,7 @@ installations() {
 	sudo apt-add-repository ppa:webupd8team/sublime-text-3 -y || errors+=("adding the Sublime Text 3 source to sources.list")
 	sudo apt-get update || errors+=("updating system")
 	sudo apt-get upgrade -y || errors+=("upgrading system")
-	sudo apt-get install sl vim tmux git virtualenv libxss1 libappindicator1 libindicator7 sublime-text-installer apache2 -y || errors+=("apt-get installations")
+	sudo apt-get install sl vim tmux git virtualenv python3-tk libxss1 libappindicator1 libindicator7 sublime-text-installer apache2 -y || errors+=("apt-get installations")
 	sudo chown -R `whoami`:`whoami` /var/www/ || errors+=("giving user full permissions to /var/www")
 
 	# git
@@ -110,7 +110,7 @@ Hidden=false'
 
 	# Virtualenvs
 	echo ""; echo "Setting up virtualenvs..."
-	virtualenv -p python3.5 "$HOME/.virtualenvs/MainEnv" || errors+=("virtualenvs: MainEnv: creation")
+	virtualenv -p python3.5 "$HOME/.virtualenvs/MainEnv" --system-site-packages || errors+=("virtualenvs: MainEnv: creation")
 	source "$HOME/.virtualenvs/MainEnv/bin/activate" || errors+=("virtualenvs: MainEnv: sourcing")
 	pip install myplatform flask requests || errors+=("virtualenvs: MainEnv: installing myplatform, flask, and requests")
 }
@@ -240,7 +240,7 @@ visuals
 programs
 
 if [[ ${#errors[@]} > 1 ]]; then
-	border "${errors[@]}" > "$HOME/errors.txt"
+	border "${errors[@]}" > "$HOME/setup-errors.txt"
 fi
 
 #sudo reboot
