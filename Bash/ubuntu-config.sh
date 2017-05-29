@@ -108,7 +108,7 @@ Hidden=false'
 	# Virtualenvs
 	echo ""; echo "Setting up virtualenvs..."
 	virtualenv -p python3.5 "$HOME/.virtualenvs/MainEnv" --system-site-packages || errors+=("MainEnv: creation")
-	source "$HOME/.virtualenvs/MainEnv/bin/activate" || errors+=("MainEnv: sourcing")
+	source "$HOME/.virtualenvs/MainEnv/bin/activate" || errors+=("MainEnv: activating")
 	pip install myplatform flask requests || errors+=("MainEnv: installing myplatform, flask, and requests")
 }
 
