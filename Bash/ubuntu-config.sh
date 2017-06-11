@@ -28,10 +28,11 @@ errors=("Errors:")
 installations() {
 	# apt
 	echo ""; echo "Aptitude installations..."
-	sudo apt-add-repository ppa:webupd8team/sublime-text-3 -y || errors+=("installations: adding the sublime text repository to sources.list")
+	sudo apt-add-repository ppa:webupd8team/sublime-text-3 -y || errors+=("installations: adding the sublime text repository")
+	sudo apt-add-repository ppa:neurobin/ppa -y || errors+=("installations: adding the Shc repository")
 	sudo apt-get update || errors+=("installations: updating system")
 	sudo apt-get upgrade -y || errors+=("installations: upgrading system")
-	sudo apt-get install sl vim tmux git virtualenv python3-tk libxss1 libappindicator1 libindicator7 sublime-text-installer apache2 -y || errors+=("installations: apt-get")
+	sudo apt-get install sl vim tmux git virtualenv python3-tk sublime-text-installer shc apache2 -y || errors+=("installations: apt-get")
 	sudo chown -R `whoami`:`whoami` /var/www/ || errors+=("installations: giving user full permissions to /var/www/")
 
 	# git
