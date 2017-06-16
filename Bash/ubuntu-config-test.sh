@@ -60,7 +60,13 @@ system() {
 	# System Settings
 	echo ""; echo "Updating system settings..."
 	gsettings set org.gnome.desktop.session idle-delay 1800 || errors+=("system settings: changing the delay for turning the screen off when inactive")
-
+	
+	# Virtualenvs
+	echo ""; echo "Setting up virtualenvs..."
+	virtualenv -p python3.5 "$HOME/.virtualenvs/MainEnv" --system-site-packages || errors+=("MainEnv: creation")
+	source "$HOME/.virtualenvs/MainEnv/bin/activate" || errors+=("MainEnv: activating")
+	pip install myplatform flask requests || errors+=("MainEnv: installing myplatform, flask, and requests")
+	
 	# .bashrc
 	echo ""; echo "Updating .bashrc..."
 	bachrc_text='source ~/.bash_additions'
@@ -104,12 +110,6 @@ Hidden=false'
 			ln -s "$HOME/Projects/Git/scripts/Bash/$f" "$HOME/bin/$sans_ext" || errors+=("~/bin: creating symbolic links")
 		fi
 	done
-
-	# Virtualenvs
-	echo ""; echo "Setting up virtualenvs..."
-	virtualenv -p python3.5 "$HOME/.virtualenvs/MainEnv" --system-site-packages || errors+=("MainEnv: creation")
-	source "$HOME/.virtualenvs/MainEnv/bin/activate" || errors+=("MainEnv: activating")
-	pip install myplatform flask requests || errors+=("MainEnv: installing myplatform, flask, and requests")
 }
 
 
