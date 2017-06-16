@@ -139,6 +139,8 @@ visuals() {
 programs() {
 	# Git
 	echo ""; echo "Configuring Git..."
+	git config --global user.name "Nelson Earle" || errors+=("git: setting name")
+	git config --global user.email "nelson.earle137@gmail.com" || errors+=("git: setting email")
 	git config --global push.default simple || errors+=("git: setting the default push")
 	
 	# Firefox
