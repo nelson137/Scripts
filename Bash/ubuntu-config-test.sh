@@ -13,9 +13,9 @@ pre-setup() {
 	
 	# Home Hierarchy
 	echo ""; echo "Setting up home hierarchy..."
-	cd ~
-	mkdir -p .virtualenvs bin Projects && cd Projects
-	mkdir -p Bash Git Python Web/Flask
+	cd "$HOME"
+	rm examples.desktop
+	mkdir -p .virtualenvs bin Projects && cd Projects && mkdir -p Bash Git Python Web/Flask
 }
 
 
