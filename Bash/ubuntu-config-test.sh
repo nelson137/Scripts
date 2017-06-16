@@ -39,6 +39,7 @@ installations() {
 	git clone "https://github.com/nelson137/scripts.git" "$HOME/Projects/Git/scripts/" || errors+=("git: cloning scripts repository")
 	git clone "https://github.com/nelson137/wallpapers.git" "$HOME/Projects/Git/wallpapers/" || errors+=("git: cloning wallpapers repository")
 	rm -r "$HOME/Pictures/"
+	ln -s "$HOME/Projects/Git/wallpapers/Pictures/" "$HOME/"
 	sudo wget -O /usr/local/bin/git-cache-meta "https://gist.githubusercontent.com/andris9/1978266/raw/9645c54ccc3c4af70bffb6fecdd396c25ea689d9/git-cache-meta.sh" || errors+=("git-cache-meta: downloading")
 	sudo chmod +x /usr/local/bin/git-cache-meta || errors+=("git-cache-meta: making executable")
 
@@ -155,8 +156,7 @@ programs() {
 	// Enable search suggestions
 	user_pref("browser.search.suggest.enabled", true);
  	user_pref("browser.urlbar.suggest.searches", true);
-	// 
-	Homepage
+	// Homepage
 	user_pref("browser.startup.homepage", "about:newtab");
 	// Newtab blank
 	user_pref("browser.newtabpage.enabled", false);
