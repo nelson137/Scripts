@@ -4,13 +4,12 @@ pre-setup() {
 	# root passwd
 	root-pass() {
 		if [[ $# > 0 ]]; then
-			sudo echo ""; echo "Change root password..."
-		else
-			sudo echo "Change root password..."
+			sudo echo ""
 		fi
+		sudo echo "Change root password..."
 		sudo passwd root || root-pass "again"
 	}
-	#root-pass
+	root-pass
 	
 	# Home Hierarchy
 	echo ""; echo "Setting up home hierarchy..."
@@ -27,33 +26,32 @@ errors=("Errors:")
 
 installations() {
 	# apt
-	#echo ""; echo "Aptitude installations..."
-	#sudo apt-add-repository ppa:webupd8team/sublime-text-3 -y || errors+=("installations: adding the sublime text repository")
-	#sudo apt-add-repository ppa:neurobin/ppa -y || errors+=("installations: adding the Shc repository")
+	echo ""; echo "Aptitude installations..."
+	sudo apt-add-repository ppa:webupd8team/sublime-text-3 -y || errors+=("installations: adding the sublime text repository")
+	sudo apt-add-repository ppa:neurobin/ppa -y || errors+=("installations: adding the Shc repository")
 	#sudo apt-get update || errors+=("installations: updating system")
 	#sudo apt-get upgrade -y || errors+=("installations: upgrading system")
-	#sudo apt-get install sl vim tmux git virtualenv python3-tk sublime-text-installer shc apache2 -y || errors+=("installations: apt-get")
-	sudo apt-get install vim git virtualenv -y || errors+=("installations: apt-get")
-	#sudo chown -R `whoami`:`whoami` /var/www/ || errors+=("installations: giving user full permissions to /var/www/")
+	sudo apt-get install vim tmux git virtualenv python3-tk sublime-text-installer shc apache2 -y || errors+=("installations: apt-get")
+	sudo chown -R `whoami`:`whoami` /var/www/ || errors+=("installations: giving user full permissions to /var/www/")
 
 	# git
 	echo ""; echo "Cloning Git tools and repositories..."
 	git clone "https://github.com/nelson137/scripts.git" "$HOME/Projects/Git/scripts/" || errors+=("git: cloning scripts repository")
 	git clone "https://github.com/nelson137/wallpapers.git" "$HOME/Projects/Git/wallpapers/" || errors+=("git: cloning wallpapers repository")
-	#sudo wget -O /usr/local/bin/git-cache-meta "https://gist.githubusercontent.com/andris9/1978266/raw/9645c54ccc3c4af70bffb6fecdd396c25ea689d9/git-cache-meta.sh" || errors+=("git-cache-meta: downloading")
-	#sudo chmod +x /usr/local/bin/git-cache-meta || errors+=("git-cache-meta: making executable")
+	sudo wget -O /usr/local/bin/git-cache-meta "https://gist.githubusercontent.com/andris9/1978266/raw/9645c54ccc3c4af70bffb6fecdd396c25ea689d9/git-cache-meta.sh" || errors+=("git-cache-meta: downloading")
+	sudo chmod +x /usr/local/bin/git-cache-meta || errors+=("git-cache-meta: making executable")
 
 	# Google Chrome
-	#echo ""; echo "Installing Google Chrome..."
-	#wget -O "$HOME/Downloads/google-chrome.deb" "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" || errors+=("Google Chrome: downloading")
-	#sudo dpkg -i "$HOME/Downloads/google-chrome.deb" || sudo apt-get install -f -y && sudo dpkg -i "$HOME/Downloads/google-chrome.deb" || errors+=("Google Chrome: unpacking")
-	#rm "$HOME/Downloads/google-chrome.deb" || errors+=("Google Chrome: deleting deb")
+	echo ""; echo "Installing Google Chrome..."
+	wget -O "$HOME/Downloads/google-chrome.deb" "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" || errors+=("Google Chrome: downloading")
+	sudo dpkg -i "$HOME/Downloads/google-chrome.deb" || sudo apt-get install -f -y && sudo dpkg -i "$HOME/Downloads/google-chrome.deb" || errors+=("Google Chrome: unpacking")
+	rm "$HOME/Downloads/google-chrome.deb" || errors+=("Google Chrome: deleting deb")
 
 	# Tor
-	#echo ""; echo "Installing Tor..."
-	#wget -O "$HOME/Downloads/tor.tar.xz" "https://github.com/TheTorProject/gettorbrowser/releases/download/v6.5.1/tor-browser-linux64-6.5.1_en-US.tar.xz" || errors+=("Tor: downloading")
-	#mkdir "$HOME/tor" && tar -xf "$HOME/Downloads/tor.tar.xz" -C "$HOME/tor/" --strip-components=1 || errors+=("Tor: unpacking")
-	#rm "$HOME/Downloads/tor.tar.xz" || errors+=("Tor: deleting tar.xz")
+	echo ""; echo "Installing Tor..."
+	wget -O "$HOME/Downloads/tor.tar.xz" "https://github.com/TheTorProject/gettorbrowser/releases/download/v6.5.1/tor-browser-linux64-6.5.1_en-US.tar.xz" || errors+=("Tor: downloading")
+	mkdir "$HOME/tor" && tar -xf "$HOME/Downloads/tor.tar.xz" -C "$HOME/tor/" --strip-components=1 || errors+=("Tor: unpacking")
+	rm "$HOME/Downloads/tor.tar.xz" || errors+=("Tor: deleting tar.xz")
 }
 
 
