@@ -99,12 +99,13 @@ Hidden=false'
 
 	# ~/bin
 	echo ""; echo "Creating ~/bin symbolic links..."
-	cd "$HOME/Projects/Git/scripts/Bash/"
-	files=(*)
-	for f in ${files[@]}; do
-		sans_ext="${s%.sh}"
-		if [[ ! -f $HOME/bin/$sans_ext ]]; then
-			ln -s "$HOME/Projects/Git/scripts/Bash/$f" "$HOME/bin/$sans_ext" || errors+=("~/bin: creating symbolic links")
+	files=($HOME/Projects/Git/scripts/Bash/*)
+	for f in "${files[@]}"; do
+		if [[ -f $f ]]; then
+			bin_path="$HOME/bin/$(echo ${f%.sh} | cut -d '/' -f 8)"
+			if [[ ! -f $bin_path ]]; then
+				ln -s "$f" "$bin_path"
+			fi
 		fi
 	done
 }
