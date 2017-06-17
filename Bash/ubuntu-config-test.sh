@@ -67,7 +67,7 @@ system() {
 	
 	# .bashrc
 	echo ""; echo "Updating .bashrc..."
-	bachrc_text='source ~/.bash_additions'
+	bashrc_text='source ~/.bash_additions'
 	ln -s "$HOME/Projects/Git/scripts/Bash/DotFiles/.bash_additions" "$HOME/" || errors+=("bashrc: creating .bash_additions symbolic link")
 	if [[ -f $HOME/.bashrc ]]; then
 		echo "
