@@ -69,18 +69,17 @@ system() {
 	echo ""; echo "Updating .bashrc..."
 	bachrc_text='source ~/.bash_additions'
 	ln -s "$HOME/Projects/Git/scripts/Bash/DotFiles/.bash_additions" "$HOME/" || errors+=("bashrc: creating .bash_additions symbolic link")
-	if [ -f "$HOME/.bashrc" ]; then
+	if [[ -f $HOME/.bashrc ]]; then
 		echo "
 $bashrc_text" >> "$HOME/.bashrc"
 	else
 		echo "$bashrc_text" > "$HOME/.bashrc"
 	fi
-	source "$HOME/.bash_additions"
 
 	# .vimrc
 	echo ""; echo "Updating .vimrc..."
 	vimrc_text="set whichwrap+=<,>,[,]"
-	if [ -f "$HOME/.vimrc" ]; then
+	if [[ -f "$HOME/.vimrc" ] then
 		echo "
 $vimrc_text" >> "$HOME/.vimrc"
 	else
@@ -104,7 +103,7 @@ Hidden=false'
 	files=(*)
 	for f in ${files[@]}; do
 		sans_ext="${s%.sh}"
-		if [ ! -f "$HOME/bin/$sans_ext" ]; then
+		if [[ ! -f $HOME/bin/$sans_ext ]]; then
 			ln -s "$HOME/Projects/Git/scripts/Bash/$f" "$HOME/bin/$sans_ext" || errors+=("~/bin: creating symbolic links")
 		fi
 	done
@@ -178,7 +177,7 @@ programs() {
 		fi
 	done < "$HOME/.mozilla/firefox/profiles.ini"
 
-	if [ -f "$HOME/.mozilla/firefox/$ff_profile/user.js" ]; then
+	if [[ -f $HOME/.mozilla/firefox/$ff_profile/user.js" ]]; then
 	    echo "
 $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Firefox: settings")
 	else
