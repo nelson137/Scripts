@@ -1,5 +1,7 @@
 #!/bin/bash
 
+errors=("Errors:")
+
 pre-setup() {
 	# root passwd
 	root-pass() {
@@ -17,12 +19,6 @@ pre-setup() {
 	rm examples.desktop
 	mkdir -p .virtualenvs bin Projects && cd Projects && mkdir -p Bash Git Python Web/Flask
 }
-
-
-
-errors=("Errors:")
-
-
 
 installations() {
 	# apt
