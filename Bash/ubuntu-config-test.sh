@@ -191,11 +191,42 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 
 	# Google Chrome
 	echo ""; echo "Configuring Google Chrome..."
-	google-chrome && sleep 3 && kill -9 "$(pgrep google-chrome)" || errors+=("Google Chrome: starting then stopping")
+	google-chrome &
+
+	for ((i=0; i<10; i++)); do
+		sleep 1
+		window=$(xdotool search --all --onlyvisible --pid "$(pgrep chrome)" --name "")
+		if [[ ${#window} > 0 ]]; then
+			xdotool mousemove --sync --window "$window" 440 105 click 1
+			break
+		elif [[ $i == 9 ]]; then
+			errors+=("Google Chrome: closing first-time-open menu")
+		fi
+	done
+
+	for ((i=0; i<10; i++)); do
+		sleep 1
+		window=$(xdotool search --all --onlyvisible --pid "$(pgrep chrome)")
+		if [[ ${#window} > 0 ]]; then
+			xdotool windowfocus "$window" key "Control_L+w"
+			break
+		elif [[ $i == 9 ]]; then
+			errors+=("Google Chrome: closing window")
+		fi
+	done
 	
 	# Sublime Text
 	echo ""; echo "Configuring Sublime Text..."
-	subl && sleep 2 && kill -9 "$(pgrep subl)" || errors+=("Sublime Text: starting then stopping")
+	subl
+	for ((i=0; i<10; i++)); do
+		window=$(xdotool search --all --onlyvisible --pid "$(pgrep subl)")
+		if [[ ${#window} > 0 ]]; then
+			xdotool windowfocus "$window" key "Control_L+w"
+			break
+		elif [[ $i == 9 ]]; then
+			errors+=("Sublime Text: closing window")
+		fi
+	done
 	wget -O "$HOME/.config/sublime-text-3/Installed Packages/Package Control.sublime-package" "https://packagecontrol.io/Package%20Control.sublime-package" || errors+=("Sublime Text: downloading Package Control")
 	installed_packages='{
 	"installed_packages":
@@ -241,8 +272,9 @@ visuals
 #programs
 
 if [[ ${#errors[@]} > 1 ]]; then
-	border "${errors[@]}" > "$HOME/setup-errors.log"
+	for e in "${errors[@]}"; do
+		echo "$e" >> "$HOME/setup-errors.log"
+	done
 fi
 
 #sudo reboot
-
