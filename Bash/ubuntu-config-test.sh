@@ -178,7 +178,7 @@ programs() {
 		fi
 	done < "$HOME/.mozilla/firefox/profiles.ini"
 
-	if [[ -f $HOME/.mozilla/firefox/$ff_profile/user.js" ]]; then
+	if [[ -f $HOME/.mozilla/firefox/$ff_profile/user.js ]]; then
 	    echo "
 $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Firefox: settings")
 	else
