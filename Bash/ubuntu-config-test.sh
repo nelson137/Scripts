@@ -27,7 +27,7 @@ installations() {
 	sudo apt-add-repository ppa:neurobin/ppa -y || errors+=("installations: adding the Shc repository")
 	sudo apt-get update || errors+=("installations: apt-get update")
 	#sudo apt-get upgrade -y || errors+=("installations: apt-get upgrade")
-	sudo apt-get install vim tmux git virtualenv python3-tk sublime-text-installer shc apache2 -y || errors+=("installations: apt-get")
+	sudo apt-get install vim git virtualenv sublime-text-installer xdotool tmux python3-tk apache2 shc -y || errors+=("installations: apt-get")
 	sudo chown -R `whoami`:`whoami` /var/www/ || errors+=("installations: giving user full permissions to /var/www/")
 
 	# git
