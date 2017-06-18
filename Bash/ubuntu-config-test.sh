@@ -214,8 +214,7 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 		sleep 1
 		window=$(xdotool search --all --onlyvisible --pid "$(pgrep chrome)")
 		if [[ ${#window} > 0 ]]; then
-			#xdotool windowfocus "$window" key "Control_L+q"
-			kill -9 "$(pgrep chrome)"
+			xdotool windowfocus "$window" key "Control_L+q"
 			break
 		elif [[ $i == 9 ]]; then
 			errors+=("Google Chrome: closing window")
