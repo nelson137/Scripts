@@ -278,7 +278,7 @@ programs
 
 if [[ ${#errors[@]} > 1 ]]; then
 	for e in "${errors[@]}"; do
-		echo "$e" >> "$HOME/setup-errors.log"
+		echo "$e" >> "$HOME/config-errors.log"
 	done
 fi
 
