@@ -174,7 +174,7 @@ user_pref("browser.search.defaultenginename.US", "data:text/plain,browser.search
 '
 
 	firefox &
-	w=$(xdotool search --sync --all --onlyvisible --pid "$(firefox)" --name ".*Mozilla Firefox")
+	w=$(xdotool search --sync --all --onlyvisible --pid "$(pgrep firefox)" --name ".*Mozilla Firefox")
 	xdotool windowfocus --sync "$w" key "Control_L+q"
 	
 	while IFS= read -r line; do
