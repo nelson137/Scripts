@@ -265,7 +265,7 @@ pre-setup
 installations
 system
 visuals
-#programs
+programs
 
 if [[ ${#errors[@]} > 1 ]]; then
 	for e in "${errors[@]}"; do
