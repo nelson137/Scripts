@@ -206,7 +206,7 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 	
 	wget -O "$HOME/.config/sublime-text-3/Installed Packages/Package Control.sublime-package" "https://packagecontrol.io/Package%20Control.sublime-package" || errors+=("Sublime Text: downloading Package Control")
 	installed_packages='{
-	"installed_packages":
+"installed_packages":
 	[
 		"A File Icon",
 		"Bash Build System",
@@ -219,7 +219,7 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 }
 '
 	subl_prefs='{
-	"ignored_packages":
+"ignored_packages":
 	[
 		"Vintage"
 	],
