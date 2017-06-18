@@ -224,9 +224,9 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 	echo ""; echo "Configuring Sublime Text..."
 	subl
 	for ((i=0; i<10; i++)); do
-		window=$(xdotool search --all --onlyvisible --pid "$(pgrep subl)")
+		window=$(xdotool search --all --onlyvisible --pid "$(pgrep sublime_text)")
 		if [[ ${#window} > 0 ]]; then
-			xdotool windowfocus "$window" key "Control_L+w"
+			xdotool windowfocus "$window" key "Control_L+q"
 			break
 		elif [[ $i == 9 ]]; then
 			errors+=("Sublime Text: closing window")
