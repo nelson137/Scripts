@@ -176,7 +176,8 @@ programs() {
 		sleep 1
 		window=$(xdotool search --all --onlyvisible --pid "$(pgrep firefox)")
 		if [[ ${#window} > 0 ]]; then
-			xdotool windowfocus "$window" key "Control_L+q"
+			#xdotool windowfocus "$window" key "Control_L+q"
+			kill -9 "$(pgrep firefox)"
 			break
 		elif [[ $i == 9 ]]; then
 			errors+=("Firefox: closing window")
@@ -202,7 +203,8 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 		sleep 1
 		window=$(xdotool search --all --onlyvisible --pid "$(pgrep chrome)" --name "")
 		if [[ ${#window} > 0 ]]; then
-			xdotool mousemove --sync --window "$window" 440 105 click 1
+			#xdotool mousemove --sync --window "$window" 440 105 click 1
+			kill -9 "$(pgrep chrome)"
 			break
 		elif [[ $i == 9 ]]; then
 			errors+=("Google Chrome: closing first-time-open menu")
@@ -226,7 +228,8 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 	for ((i=0; i<10; i++)); do
 		window=$(xdotool search --all --onlyvisible --pid "$(pgrep sublime_text)")
 		if [[ ${#window} > 0 ]]; then
-			xdotool windowfocus "$window" key "Control_L+q"
+			#xdotool windowfocus "$window" key "Control_L+q"
+			kill -9 "$(pgrep sublime_text)"
 			break
 		elif [[ $i == 9 ]]; then
 			errors+=("Sublime Text: closing window")
