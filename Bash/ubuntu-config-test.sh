@@ -135,11 +135,20 @@ visuals() {
 
 
 programs() {
+	# TESTING INSTALLATIONS
+	sudo apt-add-repository ppa:webupd8team/sublime-text-3 -y
+	sudo apt-get update
+	sudo apt-get install xdotool sublime-text-installer -y
+	
+	wget -O "$HOME/Downloads/google-chrome.deb" "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+	sudo dpkg -i "$HOME/Downloads/google-chrome.deb" || sudo apt-get install -f -y && sudo dpkg -i "$HOME/Downloads/google-chrome.deb"
+	rm "$HOME/Downloads/google-chrome.deb"
+	
 	# Git
-	echo ""; echo "Configuring Git..."
-	git config --global user.name "Nelson Earle" || errors+=("git: setting name")
-	git config --global user.email "nelson.earle137@gmail.com" || errors+=("git: setting email")
-	git config --global push.default simple || errors+=("git: setting the default push")
+	#echo ""; echo "Configuring Git..."
+	#git config --global user.name "Nelson Earle" || errors+=("git: setting name")
+	#git config --global user.email "nelson.earle137@gmail.com" || errors+=("git: setting email")
+	#git config --global push.default simple || errors+=("git: setting the default push")
 	
 	# Firefox
 	echo ""; echo "Configuring Firefox..."
@@ -176,8 +185,8 @@ programs() {
 		sleep 1
 		window=$(xdotool search --all --onlyvisible --pid "$(pgrep firefox)" --name ".+")
 		if [[ ${#window} > 0 ]]; then
-			#xdotool windowfocus --sync "$window" key "Control_L+q"
-			kill -9 "$(pgrep firefox)"
+			xdotool windowfocus --sync "$window" key "Control_L+q"
+			#kill -9 "$(pgrep firefox)"
 			break
 		elif [[ $i == 9 ]]; then
 			errors+=("Firefox: closing window")
@@ -227,8 +236,8 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 	for ((i=0; i<10; i++)); do
 		window=$(xdotool search --all --onlyvisible --pid "$(pgrep sublime_text)")
 		if [[ ${#window} > 0 ]]; then
-			#xdotool windowfocus --sync "$window" key "Control_L+q"
-			kill -9 "$(pgrep sublime_text)"
+			xdotool windowfocus --sync "$window" key "Control_L+q"
+			#kill -9 "$(pgrep sublime_text)"
 			break
 		elif [[ $i == 9 ]]; then
 			errors+=("Sublime Text: closing window")
@@ -272,10 +281,10 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 
 
 
-pre-setup
-installations
-system
-visuals
+#pre-setup
+#installations
+#system
+#visuals
 programs
 
 if [[ ${#errors[@]} > 1 ]]; then
