@@ -174,7 +174,7 @@ programs() {
 	sleep 3 && firefox &
 	for ((i=0; i<10; i++)); do
 		sleep 1
-		window=$(xdotool search --all --onlyvisible --pid "$(pgrep firefox)")
+		window=$(xdotool search --all --onlyvisible --pid "$(pgrep firefox)" --name ".+")
 		if [[ ${#window} > 0 ]]; then
 			#xdotool windowfocus "$window" key "Control_L+q"
 			kill -9 "$(pgrep firefox)"
