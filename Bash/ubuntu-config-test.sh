@@ -171,7 +171,17 @@ programs() {
 	user_pref("browser.search.defaultenginename", "DuckDuckGo");
 	user_pref("browser.search.defaultenginename.US", "data:text/plain,browser.search.defaultenginename.US=DuckDuckGo");
 	*/'
-	firefox && sleep 3 && kill -9 "$(pgrep firefox)" || errors+=("Firefox: starting then stopping")
+	firefox &
+	for ((i=0; i<10; i++)); do
+		sleep 1
+		window=$(xdotool search --all --onlyvisible --pid "$(pgrep firefox)")
+		if [[ ${#window} > 0 ]]; then
+			xdotool windowfocus "$window" key "Control_L+q"
+			break
+		elif [[ $i == 9 ]]; then
+			errors+=("Firefox: closing window")
+		fi
+	done
 	while IFS= read -r line; do
 		if [[ $line == Path=* ]]; then
 			ff_profile="${line:5}"
@@ -188,7 +198,6 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 	# Google Chrome
 	echo ""; echo "Configuring Google Chrome..."
 	google-chrome &
-
 	for ((i=0; i<10; i++)); do
 		sleep 1
 		window=$(xdotool search --all --onlyvisible --pid "$(pgrep chrome)" --name "")
@@ -204,7 +213,7 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 		sleep 1
 		window=$(xdotool search --all --onlyvisible --pid "$(pgrep chrome)")
 		if [[ ${#window} > 0 ]]; then
-			xdotool windowfocus "$window" key "Control_L+w"
+			xdotool windowfocus "$window" key "Control_L+q"
 			break
 		elif [[ $i == 9 ]]; then
 			errors+=("Google Chrome: closing window")
