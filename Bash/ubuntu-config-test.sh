@@ -194,7 +194,8 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 	echo ""; echo "Configuring Google Chrome..."
 	google-chrome &
 	w=$(xdotool search --sync --all --onlyvisible --pid "$(pgrep chrome)" --name ".*")
-	xdotool windowfocus --sync "$w" mousemove --sync --window "$w" 440 105 click 1
+	#xdotool windowfocus --sync "$w" mousemove --sync --window "$w" 440 105 click 1
+	xdotool windowfocus --sync "$w" key "Return" key "Return"
 	w=$(xdotool search --sync --all --onlyvisible --pid "$(pgrep chrome)" --name ".*Google Chrome")
 	xdotool windowfocus --sync "$w" key "Control_L+Shift_L+w"
 	
