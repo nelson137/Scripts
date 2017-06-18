@@ -203,8 +203,7 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 		sleep 1
 		window=$(xdotool search --all --onlyvisible --pid "$(pgrep chrome)" --name "")
 		if [[ ${#window} > 0 ]]; then
-			#xdotool mousemove --sync --window "$window" 440 105 click 1
-			kill -9 "$(pgrep chrome)"
+			xdotool mousemove --sync --window "$window" 440 105 click 1
 			break
 		elif [[ $i == 9 ]]; then
 			errors+=("Google Chrome: closing first-time-open menu")
@@ -215,7 +214,8 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 		sleep 1
 		window=$(xdotool search --all --onlyvisible --pid "$(pgrep chrome)")
 		if [[ ${#window} > 0 ]]; then
-			xdotool windowfocus "$window" key "Control_L+q"
+			#xdotool windowfocus "$window" key "Control_L+q"
+			kill -9 "$(pgrep chrome)"
 			break
 		elif [[ $i == 9 ]]; then
 			errors+=("Google Chrome: closing window")
