@@ -135,63 +135,48 @@ visuals() {
 
 
 programs() {
-	# TESTING INSTALLATIONS
-	sudo apt-add-repository ppa:webupd8team/sublime-text-3 -y
-	sudo apt-get update
-	sudo apt-get install xdotool sublime-text-installer -y
-	
-	wget -O "$HOME/Downloads/google-chrome.deb" "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-	sudo dpkg -i "$HOME/Downloads/google-chrome.deb" || sudo apt-get install -f -y && sudo dpkg -i "$HOME/Downloads/google-chrome.deb"
-	rm "$HOME/Downloads/google-chrome.deb"
-	
 	# Git
-	#echo ""; echo "Configuring Git..."
-	#git config --global user.name "Nelson Earle" || errors+=("git: setting name")
-	#git config --global user.email "nelson.earle137@gmail.com" || errors+=("git: setting email")
-	#git config --global push.default simple || errors+=("git: setting the default push")
+	echo ""; echo "Configuring Git..."
+	git config --global user.name "Nelson Earle" || errors+=("git: setting name")
+	git config --global user.email "nelson.earle137@gmail.com" || errors+=("git: setting email")
+	git config --global push.default simple || errors+=("git: setting the default push")
 	
 	# Firefox
 	echo ""; echo "Configuring Firefox..."
 	ff_user_text='// UI bar widgets
-	user_pref("browser.uiCustomization.state", "{\"placements\":{\"PanelUI-contents\":[\"zoom-controls\",\"new-window-button\",\"privatebrowsing-button\",\"save-page-button\",\"history-panelmenu\",\"fullscreen-button\",\"preferences-button\",\"add-ons-button\",\"developer-button\"],\"addon-bar\":[\"addonbar-closebutton\",\"status-bar\"],\"PersonalToolbar\":[\"personal-bookmarks\"],\"nav-bar\":[\"urlbar-container\",\"bookmarks-menu-button\",\"downloads-button\"],\"TabsToolbar\":[\"tabbrowser-tabs\",\"new-tab-button\",\"alltabs-button\"],\"toolbar-menubar\":[\"menubar-items\"]},\"seen\":[\"loop-button\",\"pocket-button\",\"developer-button\"],\"dirtyAreaCache\":[\"PersonalToolbar\",\"nav-bar\",\"PanelUI-contents\",\"addon-bar\",\"TabsToolbar\",\"toolbar-menubar\"],\"currentVersion\":6,\"newElementCount\":0}");
-	// Show my windows and tabs from last time
-	user_pref("browser.startup.page", 3);
-	// Clicking once in urlbar selects all
-	user_pref("browser.urlbar.clickSelectsAll", true);
-	// Enable search suggestions
-	user_pref("browser.search.suggest.enabled", true);
- 	user_pref("browser.urlbar.suggest.searches", true);
-	// Homepage
-	user_pref("browser.startup.homepage", "about:newtab");
-	// Newtab blank
-	user_pref("browser.newtabpage.enabled", false);
-	user_pref("browser.newtabpage.enhanced", false);
-	// Do not show about:config warning
-	user_pref("general.warnOnAboutConfig", false);
-	// Default search engine
-	/*
-	user_pref("browser.search.selectedEngine", "DuckDuckGo");
-	user_pref("browser.search.order.1", "DuckDuckGo");
-	user_pref("browser.search.order.US.1", "data:text/plain,browser.search.order.US.1=DuckDuckGo");
-	user_pref("browser.search.order.2", "Google");
-	user_pref("browser.search.order.US.2", "data:text/plain,browser.search.order.US.2=Google");
-	user_pref("browser.search.order.3", "Bing");
-	user_pref("browser.search.order.US.3", "data:text/plain,browser.search.order.US.3=Bing");
-	user_pref("browser.search.defaultenginename", "DuckDuckGo");
-	user_pref("browser.search.defaultenginename.US", "data:text/plain,browser.search.defaultenginename.US=DuckDuckGo");
-	*/'
-	sleep 3 && firefox &
-	for ((i=0; i<10; i++)); do
-		sleep 1
-		window=$(xdotool search --all --onlyvisible --pid "$(pgrep firefox)" --name ".+")
-		if [[ ${#window} > 0 ]]; then
-			xdotool windowfocus --sync "$window" key "Control_L+q"
-			#kill -9 "$(pgrep firefox)"
-			break
-		elif [[ $i == 9 ]]; then
-			errors+=("Firefox: closing window")
-		fi
-	done
+user_pref("browser.uiCustomization.state", "{\"placements\":{\"PanelUI-contents\":[\"zoom-controls\",\"new-window-button\",\"privatebrowsing-button\",\"save-page-button\",\"history-panelmenu\",\"fullscreen-button\",\"preferences-button\",\"add-ons-button\",\"developer-button\"],\"addon-bar\":[\"addonbar-closebutton\",\"status-bar\"],\"PersonalToolbar\":[\"personal-bookmarks\"],\"nav-bar\":[\"urlbar-container\",\"bookmarks-menu-button\",\"downloads-button\"],\"TabsToolbar\":[\"tabbrowser-tabs\",\"new-tab-button\",\"alltabs-button\"],\"toolbar-menubar\":[\"menubar-items\"]},\"seen\":[\"loop-button\",\"pocket-button\",\"developer-button\"],\"dirtyAreaCache\":[\"PersonalToolbar\",\"nav-bar\",\"PanelUI-contents\",\"addon-bar\",\"TabsToolbar\",\"toolbar-menubar\"],\"currentVersion\":6,\"newElementCount\":0}");
+// Show my windows and tabs from last time
+user_pref("browser.startup.page", 3);
+// Clicking once in urlbar selects all
+user_pref("browser.urlbar.clickSelectsAll", true);
+// Enable search suggestions
+user_pref("browser.search.suggest.enabled", true);
+user_pref("browser.urlbar.suggest.searches", true);
+// Homepage
+user_pref("browser.startup.homepage", "about:newtab");
+// Newtab blank
+user_pref("browser.newtabpage.enabled", false);
+user_pref("browser.newtabpage.enhanced", false);
+// Do not show about:config warning
+user_pref("general.warnOnAboutConfig", false);
+// Default search engine
+/*
+user_pref("browser.search.selectedEngine", "DuckDuckGo");
+user_pref("browser.search.order.1", "DuckDuckGo");
+user_pref("browser.search.order.US.1", "data:text/plain,browser.search.order.US.1=DuckDuckGo");
+user_pref("browser.search.order.2", "Google");
+user_pref("browser.search.order.US.2", "data:text/plain,browser.search.order.US.2=Google");
+user_pref("browser.search.order.3", "Bing");
+user_pref("browser.search.order.US.3", "data:text/plain,browser.search.order.US.3=Bing");
+user_pref("browser.search.defaultenginename", "DuckDuckGo");
+user_pref("browser.search.defaultenginename.US", "data:text/plain,browser.search.defaultenginename.US=DuckDuckGo");
+*/
+'
+
+	firefox &
+	w=$(xdotool search --sync --all --onlyvisible --pid "$(firefox)" --name ".*Mozilla Firefox")
+	xdotool windowfocus --sync "$w" key "Control_L+q"
+	
 	while IFS= read -r line; do
 		if [[ $line == Path=* ]]; then
 			ff_profile="${line:5}"
@@ -207,42 +192,18 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 
 	# Google Chrome
 	echo ""; echo "Configuring Google Chrome..."
-	sleep 3 && google-chrome &
-	for ((i=0; i<10; i++)); do
-		sleep 1
-		window=$(xdotool search --all --onlyvisible --pid "$(pgrep chrome)" --name "")
-		if [[ ${#window} > 0 ]]; then
-			xdotool mousemove --sync --window "$window" 440 105 click 1
-			break
-		elif [[ $i == 9 ]]; then
-			errors+=("Google Chrome: closing first-time-open menu")
-		fi
-	done
-
-	for ((i=0; i<10; i++)); do
-		sleep 1
-		window=$(xdotool search --all --onlyvisible --pid "$(pgrep chrome)")
-		if [[ ${#window} > 0 ]]; then
-			xdotool windowfocus --sync "$window" key "Control_L+q"
-			break
-		elif [[ $i == 9 ]]; then
-			errors+=("Google Chrome: closing window")
-		fi
-	done
+	google-chrome &
+	w=$(xdotool search --sync --all --onlyvisible --pid "$(pgrep chrome)" --name ".*")
+	xdotool windowfocus --sync "$w" mousemove --sync --window "$w" 440 105 click 1
+	w=$(xdotool search --sync --all --onlyvisible --pid "$(pgrep chrome)" --name ".*Google Chrome")
+	xdotool windowfocus --sync "$w" key "Control_L+Shift_L+w"
 	
 	# Sublime Text
 	echo ""; echo "Configuring Sublime Text..."
 	subl
-	for ((i=0; i<10; i++)); do
-		window=$(xdotool search --all --onlyvisible --pid "$(pgrep sublime_text)")
-		if [[ ${#window} > 0 ]]; then
-			xdotool windowfocus --sync "$window" key "Control_L+q"
-			#kill -9 "$(pgrep sublime_text)"
-			break
-		elif [[ $i == 9 ]]; then
-			errors+=("Sublime Text: closing window")
-		fi
-	done
+	w=$(xdotool search --sync --all --onlyvisible --pid "$(pgrep sublime_text)" --name ".*")
+	xdotool windowfocus --sync "$w" key "Control_L+q"
+	
 	wget -O "$HOME/.config/sublime-text-3/Installed Packages/Package Control.sublime-package" "https://packagecontrol.io/Package%20Control.sublime-package" || errors+=("Sublime Text: downloading Package Control")
 	installed_packages='{
 	"installed_packages":
@@ -281,10 +242,10 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 
 
 
-#pre-setup
-#installations
-#system
-#visuals
+pre-setup
+installations
+system
+visuals
 programs
 
 if [[ ${#errors[@]} > 1 ]]; then
