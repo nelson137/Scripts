@@ -79,7 +79,7 @@ $bashrc_text" >> "$HOME/.bashrc"
 	# .vimrc
 	echo ""; echo "Updating .vimrc..."
 	vimrc_text="set whichwrap+=<,>,[,]"
-	if [[ -f "$HOME/.vimrc" ] then
+	if [[ -f $HOME/.vimrc ] then
 		echo "
 $vimrc_text" >> "$HOME/.vimrc"
 	else
