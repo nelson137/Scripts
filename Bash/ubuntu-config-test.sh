@@ -171,7 +171,7 @@ programs() {
 	user_pref("browser.search.defaultenginename", "DuckDuckGo");
 	user_pref("browser.search.defaultenginename.US", "data:text/plain,browser.search.defaultenginename.US=DuckDuckGo");
 	*/'
-	firefox &
+	sleep 3 && firefox &
 	for ((i=0; i<10; i++)); do
 		sleep 1
 		window=$(xdotool search --all --onlyvisible --pid "$(pgrep firefox)")
@@ -198,7 +198,7 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 
 	# Google Chrome
 	echo ""; echo "Configuring Google Chrome..."
-	google-chrome &
+	sleep 3 && google-chrome &
 	for ((i=0; i<10; i++)); do
 		sleep 1
 		window=$(xdotool search --all --onlyvisible --pid "$(pgrep chrome)" --name "")
