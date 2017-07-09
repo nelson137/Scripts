@@ -61,6 +61,7 @@ system() {
 	# System Settings
 	echo ""; echo "Updating system settings..."
 	gsettings set org.gnome.desktop.session idle-delay 1800 || errors+=("system settings: changing the delay for turning the screen off when inactive")
+	gsettings set org.gnome.nautilus.preferences executable-text-activation 'launch' || errors+=("system settings: making executables double-clickable")
 
 	# .bashrc
 	echo ""; echo "Updating .bashrc..."
