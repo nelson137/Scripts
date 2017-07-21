@@ -1,61 +1,43 @@
-def convert_stable():
-	_bin = ['2', 'b', 'bi', 'bin', 'bina', 'binar', 'binary']
-	_oct = ['8', 'o', 'oc', 'oct', 'octa', 'octal']
-	_dec = ['10', 'd', 'de', 'dec', 'deci', 'decim', 'decima', 'decimal']
-	_hex = ['16', 'x', 'h', 'he', 'hex', 'hexa', 'hexad', 'hexade', 'hexadec', 'hexadeci', 'hexadecim', 'hexadecima', 'hexadecimal']
+from collections import OrderedDict
 
-	num = raw_input('Number: ')
-	base = num[0]
+def convert(num, num_base, to_base):
+	bases = {'2':2, 'b':2, 'bin':2, 'binary':2,
+			 '8':8, 'o':8, 'oct':8, 'octal':8,
+			 '10':10, 'd':10, 'dec':10, 'decimal':10,
+			 '16':16, 'x':16, 'hex':16, 'hexadecimal':16}
 
-	if base in _bin: base = 2
-	elif base in _oct: base = 8
-	elif base in _dec: base = 10
-	elif base in _hex: base = 16
-	else:
-		print("Error: Invalid Base of Number")
-		return
+	try:
+		for c in num:
+			if c not in '0123456789abcdef':
+				raise ValueError
 
-	if base == 10: num = num[1:]
-	else: num = int('0' + num, base)
+		try:
+			num_base = bases[num_base]
 
-	to_base = raw_input('Convert to Base: ')
+			try:
+				to_base = bases[to_base]
 
-	if to_base in _bin: to_base = ('b', 2)
-	elif to_base in _oct: to_base = ('o', 8)
-	elif to_base in _dec: to_base = ('d', 10)
-	elif to_base in _hex: to_base = ('x', 16)
+				if to_base == 10: # anything to dec
+					return int(num, base=num_base)
+				else: # dec to anything
+					dec = int(num, base=num_base)
+					return {2:bin, 8:oct, 16:hex}[to_base](dec)[2:]
 
-	if base == 'd': print(int(num, to_base[1]))
-	else: print(format(num, to_base[0]))
+			except KeyError:
+				print('Invalid base')
 
-def convert():
-	_bin = ['2', 'b', 'bi', 'bin', 'bina', 'binar', 'binary']
-	_oct = ['8', 'o', 'oc', 'oct', 'octa', 'octal']
-	_dec = ['10', 'd', 'de', 'dec', 'deci', 'decim', 'decima', 'decimal']
-	_hex = ['16', 'x', 'h', 'he', 'hex', 'hexa', 'hexad', 'hexade', 'hexadec', 'hexadeci', 'hexadecim', 'hexadecima', 'hexadecimal']
+		except KeyError:
+			print('Invalid base')
 
-	num = raw_input('Number: ')
-	base = num[0]
+	except ValueError:
+		print('Invalid number')
 
-	if base in _bin: base = 2
-	elif base in _oct: base = 8
-	elif base in _dec: base = 10
-	elif base in _hex: base = 16
-	else:
-		print("Error: Invalid Base of Number")
-		return
+if __name__ == '__main__':
+	test_nums = OrderedDict([('1111 ', '2  '), ('23   ', '8  '),
+		                     ('15   ', '10 '), ('1a   ', '16 ')])
 
-	if base == 10: num = num[1:]
-	else: num = int('0' + num, base)
-
-	to_base = raw_input('Convert to Base: ')
-
-	if to_base in _bin: to_base = ('b', 2)
-	elif to_base in _oct: to_base = ('o', 8)
-	elif to_base in _dec: to_base = ('d', 10)
-	elif to_base in _hex: to_base = ('x', 16)
-
-	if base == 'd': print(format(num, to_base[0]))
-	else: print(int(num, to_base[1]))
-
-convert()
+	for num in test_nums.keys():
+		for to_base in test_nums.values():
+			print('num:', num, 'from base:', test_nums[num],
+				  'to base:', to_base, 'equals:',
+				  convert(num.strip(), test_nums[num].strip(), to_base.strip()))
