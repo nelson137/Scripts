@@ -1,18 +1,20 @@
 from subprocess import Popen, PIPE
 from collections import OrderedDict
 
-class Notes:
-    """A collection of python concepts"""
+class Concepts:
+    """Demonstrate concepts from the standard library."""
 
-    @staticmethod
-    def subprocess():
+    def __init__(self):
+        self.subprocess()
+        self.orderedDict()
+
+    def subprocess(self):
         """Runs bash command and get output"""
         process = Popen('ls /home/nelson/Projects/Git', stdout=PIPE, shell=True)
         out, err = process.communicate()
         print(out.decode())
 
-    @staticmethod
-    def orderedDict():
+    def orderedDict(self):
         """Sorts an ordered dict by key, with a custom key list, and with secondary sorting"""
         data = OrderedDict([('model 6', OrderedDict([('model', 'model 6'),
                                                      ('production status', 'flight-ready')])),
@@ -46,5 +48,4 @@ class Notes:
             print(ps)
 
 if __name__ == '__main__':
-    Notes.subprocess()
-    Notes.orderedDict()
+    Concepts()
