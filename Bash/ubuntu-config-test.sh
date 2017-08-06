@@ -1,6 +1,8 @@
 #!/bin/bash
 
+
 errors=("Errors:")
+
 
 pre-setup() {
 	# root passwd
@@ -17,8 +19,22 @@ pre-setup() {
 	echo ""; echo "Setting up home hierarchy..."
 	cd "$HOME"
 	rm examples.desktop
-	mkdir -p .virtualenvs bin Projects && cd Projects && mkdir -p Bash Git Python Web/Flask
+	mkdir .virtualenvs bin Projects
+    cd Projects
+    mkdir Bash CPP Deb Git Python Web subl
+    cd subl
+    ProjectsSublProj='{
+    "folders":
+    [
+        {
+            "path": "/home/nelson/Projects"
+        }
+    ]
 }
+'
+    echo "$ProjectsSublProj" > "Projects.sublime-project"
+}
+
 
 installations() {
 	# apt
@@ -27,17 +43,36 @@ installations() {
 	sudo apt-add-repository ppa:neurobin/ppa -y || errors+=("installations: adding the Shc repository")
 	sudo apt-get update || errors+=("installations: apt-get update")
 	#sudo apt-get upgrade -y || errors+=("installations: apt-get upgrade")
-	sudo apt-get install vim git virtualenv sublime-text-installer xdotool tmux python3-tk apache2 shc -y || errors+=("installations: apt-get")
+    apt-packages=(vim git virtualenv sublime-text-installer xdotool tmux python3-tk apache2 shc)
+    for ap in "${apt-packages[@]}"; do
+        sudo apt-get install "$ap" -y || errors+=("installations: apt-get install $ap")
+    done
 	sudo chown -R `whoami`:`whoami` /var/www/ || errors+=("installations: giving user full permissions to /var/www/")
 
 	# git
 	echo ""; echo "Cloning Git tools and repositories..."
-	git clone "https://github.com/nelson137/scripts.git" "$HOME/Projects/Git/scripts/" || errors+=("git: cloning scripts repository")
-	git clone "https://github.com/nelson137/wallpapers.git" "$HOME/Projects/Git/wallpapers/" || errors+=("git: cloning wallpapers repository")
+	git clone "https://github.com/nelson137/scripts.git" "$HOME/Projects/Git/scripts/" || errors+=("git: cloning scripts")
+	git clone "https://github.com/nelson137/wallpapers.git" "$HOME/Projects/Git/wallpapers/" || errors+=("git: cloning wallpapers")
 	rm -r "$HOME/Pictures/"
 	ln -s "$HOME/Projects/Git/wallpapers/Pictures/" "$HOME/"
-	sudo wget -O /usr/local/bin/git-cache-meta "https://gist.githubusercontent.com/andris9/1978266/raw/9645c54ccc3c4af70bffb6fecdd396c25ea689d9/git-cache-meta.sh" || errors+=("git-cache-meta: downloading")
-	sudo chmod +x /usr/local/bin/git-cache-meta || errors+=("git-cache-meta: making executable")
+
+    clone-repos() {
+        for repo in "${repos[@]}"; do
+            git clone "https://github.com/nelson137/${repo}.git" || errors+=("git: cloning $repo")
+        done
+    }
+
+    cd "$HOME/Projects/Git"
+    repos=(config-files scripts)
+    clone-repos
+
+    cd ../Python
+    repos=(dict myplatform ship-catalog)
+    clone-repos
+
+    cd ../Web
+    repos=(deep-conversations)
+    clone-repos
 
 	# Google Chrome
 	echo ""; echo "Installing Google Chrome..."
@@ -51,7 +86,6 @@ installations() {
 	mkdir "$HOME/tor" && tar -xf "$HOME/Downloads/tor.tar.xz" -C "$HOME/tor/" --strip-components=1 || errors+=("Tor: unpacking")
 	rm "$HOME/Downloads/tor.tar.xz" || errors+=("Tor: deleting tar.xz")
 }
-
 
 
 system() {
@@ -99,17 +133,18 @@ Hidden=false'
 
 	# ~/bin
 	echo ""; echo "Creating ~/bin symbolic links..."
-	files=($HOME/Projects/Git/scripts/Bash/*)
+    scriptsDir="$HOME/Projects/Git/scripts/Bash"
+    cd "$scriptsDir"
+	files=(*)
 	for f in "${files[@]}"; do
 		if [[ -f $f ]]; then
-			bin_path="$HOME/bin/$(echo ${f%.sh} | cut -d '/' -f 8)"
-			if [[ ! -f $bin_path ]]; then
-				ln -s "$f" "$bin_path"
+			binPath="$HOME/bin/${f%.sh}"
+			if [[ ! -f $binPath ]]; then
+				ln -s "$scriptsDir/$f" "$binPath"
 			fi
 		fi
 	done
 }
-
 
 
 visuals() {
@@ -128,10 +163,9 @@ visuals() {
 	#dconf write "$term_profile/default-size-columns" 80 || errors+=("terminal profile: setting the default columns") #default=80
 	#dconf write "$term_profile/default-size-rows 24" || errors+=("terminal profile: setting the default rows") #default=24
 	dconf write "$term_profile/use-transparent-background" true || errors+=("terminal profile: setting transparent bg")
-	dconf write "$term_profile/background-transparency-percent" 20 || errors+=("terminal profile: setting transparent bg %")
+	dconf write "$term_profile/background-transparency-percent" 50 || errors+=("terminal profile: setting transparent bg %")
 	dconf write "$term_profile/cursor-shape" "'ibeam'" || errors+=("terminal profile: setting the cursor shape")
 }
-
 
 
 programs() {
@@ -143,52 +177,17 @@ programs() {
 	
 	# Firefox
 	echo ""; echo "Configuring Firefox..."
-	ff_user_text='// UI bar widgets
-user_pref("browser.uiCustomization.state", "{\"placements\":{\"PanelUI-contents\":[\"zoom-controls\",\"new-window-button\",\"privatebrowsing-button\",\"save-page-button\",\"history-panelmenu\",\"fullscreen-button\",\"preferences-button\",\"add-ons-button\",\"developer-button\"],\"addon-bar\":[\"addonbar-closebutton\",\"status-bar\"],\"PersonalToolbar\":[\"personal-bookmarks\"],\"nav-bar\":[\"urlbar-container\",\"bookmarks-menu-button\",\"downloads-button\"],\"TabsToolbar\":[\"tabbrowser-tabs\",\"new-tab-button\",\"alltabs-button\"],\"toolbar-menubar\":[\"menubar-items\"]},\"seen\":[\"loop-button\",\"pocket-button\",\"developer-button\"],\"dirtyAreaCache\":[\"PersonalToolbar\",\"nav-bar\",\"PanelUI-contents\",\"addon-bar\",\"TabsToolbar\",\"toolbar-menubar\"],\"currentVersion\":6,\"newElementCount\":0}");
-// Show my windows and tabs from last time
-user_pref("browser.startup.page", 3);
-// Clicking once in urlbar selects all
-user_pref("browser.urlbar.clickSelectsAll", true);
-// Enable search suggestions
-user_pref("browser.search.suggest.enabled", true);
-user_pref("browser.urlbar.suggest.searches", true);
-// Homepage
-user_pref("browser.startup.homepage", "about:newtab");
-// Newtab blank
-user_pref("browser.newtabpage.enabled", false);
-user_pref("browser.newtabpage.enhanced", false);
-// Do not show about:config warning
-user_pref("general.warnOnAboutConfig", false);
-// Default search engine
-/*
-user_pref("browser.search.selectedEngine", "DuckDuckGo");
-user_pref("browser.search.order.1", "DuckDuckGo");
-user_pref("browser.search.order.US.1", "data:text/plain,browser.search.order.US.1=DuckDuckGo");
-user_pref("browser.search.order.2", "Google");
-user_pref("browser.search.order.US.2", "data:text/plain,browser.search.order.US.2=Google");
-user_pref("browser.search.order.3", "Bing");
-user_pref("browser.search.order.US.3", "data:text/plain,browser.search.order.US.3=Bing");
-user_pref("browser.search.defaultenginename", "DuckDuckGo");
-user_pref("browser.search.defaultenginename.US", "data:text/plain,browser.search.defaultenginename.US=DuckDuckGo");
-*/
-'
-
 	firefox &
 	w=$(xdotool search --sync --all --onlyvisible --pid "$(pgrep firefox)" --name ".*Mozilla Firefox")
 	xdotool windowfocus --sync "$w" key "Control_L+q"
 	
-	while IFS= read -r line; do
+	while IFS=read -r line; do
 		if [[ $line == Path=* ]]; then
 			ff_profile="${line:5}"
 		fi
 	done < "$HOME/.mozilla/firefox/profiles.ini"
 
-	if [[ -f $HOME/.mozilla/firefox/$ff_profile/user.js ]]; then
-	    echo "
-$ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Firefox: settings")
-	else
-	    echo "$ff_user_text" > "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Firefox: settings")
-	fi
+	ln "$HOME/Projects/Git/config-files/Firefox/user.js" "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Firefox: user preferences")
 
 	# Google Chrome
 	echo ""; echo "Configuring Google Chrome..."
@@ -206,41 +205,8 @@ $ff_user_text" >> "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Fire
 	xdotool windowfocus --sync "$w" key "Control_L+q"
 	
 	wget -O "$HOME/.config/sublime-text-3/Installed Packages/Package Control.sublime-package" "https://packagecontrol.io/Package%20Control.sublime-package" || errors+=("Sublime Text: downloading Package Control")
-	installed_packages='{
-"installed_packages":
-	[
-		"A File Icon",
-		"Bash Build System",
-		"Emmet",
-		"Git",
-		"Package Control",
-		"PackageResourceViewer",
-		"Virtualenv"
-	]
+	"$HOME/Projects/Git/config-files/Sublime/link-files"
 }
-'
-	subl_prefs='{
-"ignored_packages":
-	[
-		"Vintage"
-	],
-	"rulers":
-	[
-		80
-	],
-	"open_files_in_new_window": false,
-	"close_windows_when_empty": false,
-	"ensure_newline_at_eof_on_save": true,
-	"detect_indentation": false,
-	"translate_tabs_to_spaces": false,
-	"match_brackets_angle": true,
-	"drag_text": true,
-}
-'
-	echo "$installed_packages" > "$HOME/.config/sublime-text-3/Packages/User/Package Control.sublime-settings" || errors+=("Sublime Text: Package Control installed_packages")
-	echo "$subl_prefs" > "$HOME/.config/sublime-text-3/Packages/User/Preferences.sublime-settings" || errors+=("Sublime Text: Preferences")
-}
-
 
 
 pre-setup
