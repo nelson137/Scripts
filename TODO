@@ -1,0 +1,7 @@
+- ubuntu-config
+  - sublime
+    - python snippets
+  - brainfuck interpreter (python)
+    - add interpreter to scripts/Python/
+    - `ln brainfuck ~/bin/`
+    - translate to c++ ?
