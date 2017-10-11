@@ -8,8 +8,7 @@
 
 using namespace std;
 
-#define usage "Usage: "
-
+#define usage "usage: brainfuck infile"
 
 
 map<int, int> get_bracemap(vector<char> code) {
@@ -28,6 +27,7 @@ map<int, int> get_bracemap(vector<char> code) {
 
     return bm;
 }
+
 
 void evaluate(vector<char> code, map<int, int> bm) {
     vector<int> cells;
@@ -72,6 +72,7 @@ void evaluate(vector<char> code, map<int, int> bm) {
     }
 }
 
+
 void execute(char* fn) {
     if (!fn) {
         cerr << usage << endl;
@@ -102,6 +103,7 @@ void execute(char* fn) {
         exit(1);
     }
 }
+
 
 int main(int argc, char* argv[]) {
     if (argc == 2) {
