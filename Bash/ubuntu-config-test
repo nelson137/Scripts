@@ -108,18 +108,8 @@ X-GNOME-Autostart-enabled=true
 Hidden=false' > "$HOME/.config/autostart/gnome-terminal.desktop"
 
 	# ~/bin
-	echo; echo Creating ~/bin symbolic links...
-    scriptsDir="$HOME/Projects/Git/scripts/Bash"
-    cd "$scriptsDir"
-	files=(*)
-	for f in "${files[@]}"; do
-		if [[ -f $f ]]; then
-			binPath="$HOME/bin/${f%.sh}"
-			if [[ ! -f $binPath ]]; then
-				ln -s "$scriptsDir/$f" "$binPath"
-			fi
-		fi
-	done
+	echo; echo Creating ~/bin symbolic link...
+    ln -s "$HOME/Projects/Git/dot/bin" "$HOME/" || errors +=("creating ~/bin sym link")
 }
 
 
