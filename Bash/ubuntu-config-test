@@ -49,9 +49,11 @@ installations() {
 	sudo chown -R `whoami`:`whoami` /var/www/ || errors+=("installations: giving user full permissions to /var/www/")
 
 	# git
-	echo; echo Cloning Git tools and repositories...
-	git clone "https://github.com/nelson137/scripts.git" "$HOME/Projects/Git/scripts/" || errors+=("git: cloning scripts")
-	git clone "https://github.com/nelson137/wallpapers.git" "$HOME/Projects/Git/wallpapers/" || errors+=("git: cloning wallpapers")
+    cd "$HOME/Projects/Git"
+	echo; echo Cloning Git tools repositories...
+    git clone "https://github.com/nelson137/dot.git" || errors+=("git: cloning dot")
+	git clone "https://github.com/nelson137/scripts.git" || errors+=("git: cloning scripts")
+	git clone "https://github.com/nelson137/wallpapers.git" || errors+=("git: cloning wallpapers")
 	rm -r "$HOME/Pictures/"
 	ln -s "$HOME/Projects/Git/wallpapers/Pictures/" "$HOME/"
 
