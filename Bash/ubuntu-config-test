@@ -51,29 +51,12 @@ installations() {
 	# git
     cd "$HOME/Projects/Git"
 	echo; echo Cloning Git tools repositories...
-    git clone "https://github.com/nelson137/dot.git" || errors+=("git: cloning dot")
-	git clone "https://github.com/nelson137/scripts.git" || errors+=("git: cloning scripts")
-	git clone "https://github.com/nelson137/wallpapers.git" || errors+=("git: cloning wallpapers")
+    repos=(dot config-files wallpapers scripts)
+    for repo in "${repos[@]}"; do
+        git clone "https://github.com/nelson137/${repo}.git" || errors+=("git: cloning $repo")
+    done
 	rm -r "$HOME/Pictures/"
 	ln -s "$HOME/Projects/Git/wallpapers/Pictures/" "$HOME/"
-
-    clone-repos() {
-        for repo in "${repos[@]}"; do
-            git clone "https://github.com/nelson137/${repo}.git" || errors+=("git: cloning $repo")
-        done
-    }
-
-    cd "$HOME/Projects/Git"
-    repos=(config-files scripts)
-    clone-repos
-
-    cd ../Python
-    repos=(dict myplatform ship-catalog)
-    clone-repos
-
-    cd ../Web
-    repos=(deep-conversations)
-    clone-repos
 
 	# Google Chrome
 	echo; echo Installing Google Chrome...
