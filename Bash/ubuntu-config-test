@@ -79,36 +79,33 @@ system() {
 	
 	# .bashrc
 	echo; echo Updating .bashrc...
-	bashrc_text='source "$HOME/.bash_additions"'
+	bashrc_text='
+source "$HOME/.bash_additions"'
 	ln -s "$HOME/Projects/Git/dot/files/.bash_additions" "$HOME/" || errors+=("bashrc: creating .bash_additions sym link")
 	if [[ -f $HOME/.bashrc ]]; then
-		echo "
-$bashrc_text" >> "$HOME/.bashrc"
+		echo "$bashrc_text" >> "$HOME/.bashrc"
 	else
-		echo "$bashrc_text" > "$HOME/.bashrc"
+        echo "#!/bin/bash" > "$HOME/.bashrc"
+		echo "$bashrc_text" >> "$HOME/.bashrc"
 	fi
 
 	# .vimrc
-    # TODO: use vimrc
 	echo; echo Updating .vimrc...
-	vimrc_text="set whichwrap+=<,>,[,]"
 	if [[ -f $HOME/.vimrc ]]; then
-		echo "
-$vimrc_text" >> "$HOME/.vimrc"
-	else
-		echo "$vimrc_text" > "$HOME/.vimrc"
+		mv "$HOME/.vimrc" "$HOME/.vimrc.bu" 
+        errors+=("WARN: existing ~/.vimrc has been renamed to ~/.vimrc.bu")
 	fi
+    ln -s "$HOME/Projects/Git/dot/files/.vimrc" "$HOME/" || errors+=("vimrc: creating .vimrc sym link")
 
 	# Startup Apps
 	echo; echo Creating startup app entries...
 	mkdir "$HOME/.config/autostart"
-	term_on_startup_text='[Desktop Entry]
+	echo '[Desktop Entry]
 Name=Terminal
 Type=Application
 Exec=/usr/bin/gnome-terminal
 X-GNOME-Autostart-enabled=true
-Hidden=false'
-	echo "$term_on_startup_text" > "$HOME/.config/autostart/gnome-terminal.desktop"
+Hidden=false' > "$HOME/.config/autostart/gnome-terminal.desktop"
 
 	# ~/bin
 	echo; echo Creating ~/bin symbolic links...
