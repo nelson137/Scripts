@@ -123,6 +123,7 @@ visuals() {
 	gsettings set org.gnome.desktop.background picture-uri "file://$HOME/Pictures/orion-nebula.jpg" || errors+=("setting the wallpaper")
 
 	# Terminal Profile
+    # TODO: test method with ubuntu-test
 	echo; echo Updating Terminal profile...
 	term_profile="/org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9"
 	dconf write "$term_profile/visible-name" "'Main'" || errors+=("terminal profile: setting the name")
@@ -156,6 +157,8 @@ programs() {
 	ln "$HOME/Projects/Git/config-files/Firefox/user.js" "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Firefox: user preferences")
 
 	# Google Chrome
+    # TODO: test method on ubuntu-test
+    # TODO: last resort: user input to confirm window loaded
 	echo; echo Configuring Google Chrome...
 	google-chrome &
 	w=$(xdotool search --sync --all --onlyvisible --pid "$(pgrep chrome)" --name ".*")
@@ -165,6 +168,7 @@ programs() {
 	xdotool windowfocus --sync "$w" key "Control_L+Shift_L+w"
 	
 	# Sublime Text
+    # TODO: same for chrome
 	echo; echo Configuring Sublime Text...
 	subl
 	w=$(xdotool search --sync --all --onlyvisible --pid "$(pgrep sublime_text)" --name ".*")
