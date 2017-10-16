@@ -58,12 +58,6 @@ installations() {
     rm -r "$HOME/Pictures/"
     ln -s "$HOME/Projects/Git/wallpapers/Pictures/" "$HOME/"
 
-    # Google Chrome
-    echo; echo Installing Google Chrome...
-    wget -O "$HOME/Downloads/google-chrome.deb" "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" || errors+=("Google Chrome: downloading")
-    sudo dpkg -i "$HOME/Downloads/google-chrome.deb" || sudo apt-get install -f -y && sudo dpkg -i "$HOME/Downloads/google-chrome.deb" || errors+=("Google Chrome: unpacking")
-    rm "$HOME/Downloads/google-chrome.deb" || errors+=("Google Chrome: deleting deb")
-
     # Tor
     echo; echo Installing Tor...
     wget -O "$HOME/Downloads/tor.tar.xz" "https://github.com/TheTorProject/gettorbrowser/releases/download/v7.0.6/tor-browser-linux64-7.0.6_en-US.tar.xz" || errors+=("Tor: downloading")
@@ -155,17 +149,6 @@ programs() {
     done < "$HOME/.mozilla/firefox/profiles.ini"
 
     ln "$HOME/Projects/Git/config-files/Firefox/user.js" "$HOME/.mozilla/firefox/$ff_profile/user.js" || errors+=("Firefox: user preferences")
-
-    # Google Chrome
-    # TODO: test method on ubuntu-test
-    # TODO: last resort: user input to confirm window loaded
-    echo; echo Configuring Google Chrome...
-    google-chrome &
-    w=$(xdotool search --sync --all --onlyvisible --pid "$(pgrep chrome)" --name ".*")
-    #xdotool windowfocus --sync "$w" mousemove --sync --window "$w" 440 105 click 1
-    xdotool windowfocus --sync "$w" key "Return" key "Return"
-    w=$(xdotool search --sync --all --onlyvisible --pid "$(pgrep chrome)" --name ".*Google Chrome")
-    xdotool windowfocus --sync "$w" key "Control_L+Shift_L+w"
 
     # Sublime Text
     # TODO: same for chrome
